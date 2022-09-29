@@ -1,6 +1,52 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from 'styled-components';
 
+const StyledWebSock = styled.div `
+    .form__wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .form {
+        padding: 20px 25px;
+        border-radius: 0 0 10px 10px;
+        background-color: #fff;
+    }
+    .messages {
+        background-color: #fff;
+        border-radius: 10px 10px 0 0;
+        padding: 20px 30px;
+    }
+
+    .message {
+        margin: 10px 3px;
+        padding: 10px 15px;
+        display: inline-block;
+        border-radius: 12px;
+        background-color: #d8cfcf;
+        position: relative;
+    }
+    .username {
+        position: absolute;
+        top: -13px;
+        left: 4;
+        font-size: 10px;
+        color: #000;
+        font-weight: bold;
+    }
+    .form__input, .form__btn {
+        padding: 10px 15px;
+        border: none;
+        outline: none;
+        margin-right: 10px;
+    }
+`
+
 function WebSock() {
 
     const [messages, setMessages] = useState([]);
@@ -24,7 +70,7 @@ function WebSock() {
         }
         socket.current.onmessage = (event) => {
             const message = JSON.parse(event.data);
-            setMessages((prev) => [message, ...prev])
+            setMessages((prev) => [...prev, message]);
         }
         socket.current.onclose = () => {
             console.log('Socket подключение завершено');
@@ -47,44 +93,48 @@ function WebSock() {
 
     if(!connected) {
         return (
-            <div className="form__wrapper">
-                <div className="form">
-                    <input 
-                    value={userName} 
-                    onChange={(e) => 
-                    setUserName(e.target.value)} 
-                    className="form__input" 
-                    type="text" 
-                    placeholder="Введите ваше имя" />
-                    <button className="form__btn" onClick={connect}>Войти в комнату</button>
+            <StyledWebSock>
+                <div className="form__wrapper">
+                    <div>
+                        <input 
+                        value={userName} 
+                        onChange={(e) => 
+                        setUserName(e.target.value)} 
+                        className="form__input" 
+                        type="text" 
+                        placeholder="Введите ваше имя" />
+                        <button className="form__btn" onClick={connect}>Войти в комнату</button>
+                    </div>
                 </div>
-            </div>
+            </StyledWebSock>
         )
     }
 
     return (
-        <div className="form__wrapper">
-            <div>
-                <div className="form">
-                    <input value={messageValue} onChange={(e) => setMessageValue(e.target.value)} className="form__input" placeholder="Введите сообщение.." type="text"/>
-                    <button className="form__btn" onClick={sendMessage}>Отправить</button>
-                </div>
-                <div className="messages">
-                    {messages.map(message =>
-                        <div key={message.id}>
-                            {message.event === 'connection'
-                                ? <div className="message_connection">
-                                    Пользователь {message.username} подключился
-                                </div>
-                                : <div className="message">
-                                    {message.username}. {message.message}
-                                </div>
-                            }
-                        </div>
-                    )}
+        <StyledWebSock>
+            <div className="form__wrapper">
+                <div>
+                    <div className="messages">
+                        {messages.map(message =>
+                            <div key={message.id}>
+                                {message.event === 'connection'
+                                    ? <div className="message_connection">
+                                        Пользователь {message.userName} подключился
+                                    </div>
+                                    : <div className="message">
+                                        <span className="username">{message.userName}</span> {message.message}
+                                    </div>
+                                }
+                            </div>
+                        )}
+                    </div>
+                    <div className="form">
+                        <input value={messageValue} onChange={(e) => setMessageValue(e.target.value)} className="form__input" placeholder="Введите сообщение.." type="text"/>
+                        <button className="form__btn" onClick={sendMessage}>Отправить</button>
+                    </div>
                 </div>
             </div>
-        </div>
+        </StyledWebSock>
     )
 }
 
