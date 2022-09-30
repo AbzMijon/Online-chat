@@ -47,7 +47,7 @@ const StyledWebSock = styled.div `
     }
 `
 
-function WebSock() {
+function Home() {
 
     const [messages, setMessages] = useState([]);
     const [messageValue, setMessageValue] = useState('');
@@ -138,4 +138,4 @@ function WebSock() {
     )
 }
 
-export default WebSock;
+export default Home;
