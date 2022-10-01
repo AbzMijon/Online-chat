@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from 'styled-components';
+import Aside from "../Components/Aside";
 
 const StyledWebSock = styled.div `
     .form__wrapper {
@@ -94,6 +95,7 @@ function Home() {
     if(!connected) {
         return (
             <StyledWebSock>
+                <Aside/>
                 <div className="form__wrapper">
                     <div>
                         <input 
@@ -112,6 +114,7 @@ function Home() {
 
     return (
         <StyledWebSock>
+            <Aside/>
             <div className="form__wrapper">
                 <div>
                     <div className="messages">
