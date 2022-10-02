@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { loggedUserName } from '../store/selectors/userSelectors'; 
+import lightBG from '../assets/img/lightBG.jpg';
 
 const StyledChat = styled.div `
     .form__wrapper {
@@ -10,35 +11,78 @@ const StyledChat = styled.div `
         display: flex;
         justify-content: center;
         align-items: center;
+        background: url(${lightBG});
+    }
+    .container {
+        width: 650px;
+        padding: 10px 15px;
+        margin: 0 auto;
+        position: relative;
+        height: 100%;
     }
     .form {
         padding: 20px 25px;
         border-radius: 0 0 10px 10px;
-        background-color: #fff;
+        background-color: transparent;
+        width: 100%;
     }
     .messages {
-        background-color: #fff;
+        background-color: transparent;
         border-radius: 10px 10px 0 0;
         padding: 20px 30px;
+        width: 100%;
+        overflow-y: auto;
+        max-height: 850px;
     }
-
+    .messages::-webkit-scrollbar {
+        width: 0;
+    }
     .message {
         margin: 10px 3px;
-        padding: 10px 15px;
-        display: inline-block;
-        border-radius: 12px;
-        background-color: #d8cfcf;
+        padding: 5px 15px 8px 15px;
+        display: inline-flex;
+        flex-direction: column;
+        border-radius: 12px 12px 12px 0;
+        background-color: #ffffff;
         position: relative;
+        flex-wrap: wrap;
     }
-    .username {
-        position: absolute;
-        top: -13px;
-        left: 4;
-        font-size: 10px;
-        color: #000;
+    .message_connection {
+        margin: 15px 0;
+        color: #fff;
+        text-align: center;
+        font-size: 17px;
         font-weight: bold;
     }
-    .form__input, .form__btn {
+    .username {
+        font-size: 15px;
+        color: #b71d1d;
+        font-weight: bold;
+    }
+    .form {
+        padding: 20px 25px;
+        border-radius: 10px;
+        background-color: #212121;
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .form__btn {
+        
+    }
+    .form__input {
+        width: 85%;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        font-size: 15px;
+        color: #535353;
+    }
+    .form__btn-in {
         padding: 10px 15px;
         border: none;
         outline: none;
@@ -51,7 +95,7 @@ const StyledChat = styled.div `
         transition: 0.2s ease-in;
         cursor: pointer;
     }
-    .form__btn:hover {
+    .form__btn-in:hover {
         transform: scale(1.1);
         background-color: #0e994f;
         box-shadow: 0 0 60px #6eb48f;
@@ -98,8 +142,10 @@ function Chat() {
             id: Math.round(Math.random() * 1000),
             event: 'message',
         }
-        socket.current.send(JSON.stringify(message));
-        setMessageValue('');    
+        if(message.message.length) {
+            socket.current.send(JSON.stringify(message));
+            setMessageValue('');
+        }
     }
 
     if(!connected) {
@@ -107,7 +153,7 @@ function Chat() {
             <StyledChat>
                 <div className="form__wrapper">
                     <div>
-                        <button className="form__btn" onClick={connect}>Войти в комнату</button>
+                        <button className="form__btn-in" onClick={connect}>Connect to room</button>
                     </div>
                 </div>
             </StyledChat>
@@ -117,7 +163,7 @@ function Chat() {
     return (
         <StyledChat>
             <div className="form__wrapper">
-                <div>
+                <div className="container">
                     <div className="messages">
                         {messages.map(message =>
                             <div key={message.id}>
@@ -133,8 +179,16 @@ function Chat() {
                         )}
                     </div>
                     <div className="form">
-                        <input value={messageValue} onChange={(e) => setMessageValue(e.target.value)} className="form__input" placeholder="Введите сообщение.." type="text"/>
-                        <button className="form__btn" onClick={sendMessage}>Отправить</button>
+                        <input value={messageValue} onKeyDown={(keyPress) => {
+                            if(keyPress.keyCode === 13) {
+                                sendMessage();
+                            }
+                        }}
+                        onChange={(e) => setMessageValue(e.target.value)} 
+                        className="form__input" 
+                        placeholder="Message.." 
+                        type="text"/>
+                        <button className="form__btn" onClick={sendMessage}>Send</button>
                     </div>
                 </div>
             </div>

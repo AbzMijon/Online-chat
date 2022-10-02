@@ -7,8 +7,10 @@ import { IoIosNotificationsOutline } from 'react-icons/io';
 import { FiSettings } from 'react-icons/fi';
 import { BiSupport, BiLogOut } from 'react-icons/bi';
 import { loggedUserName } from "../store/selectors/userSelectors";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import defautAvatar from '../assets/img/defaultAvatar.jpg';
+import { useNavigate } from "react-router-dom";
+import { PATH } from "../constans/routes";
 
 const StyledAside = styled.div`
     .aside {
@@ -95,12 +97,25 @@ const StyledAside = styled.div`
         display: flex;
         align-items:center;
         color: #5c5c5c;
+        cursor: pointer;
+        border-bottom: 1px solid transparent;
+    }
+    .aside__logout:hover {
+        border-bottom: 1px solid #851e1e;
+        color: #851e1e;
     }
 `
 
 function Aside():JSX.Element {
+
     const userName = useSelector(loggedUserName);
     const [handleName, setHandleName] = useState(false);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const logout = () => {
+        dispatch({type: 'userLogOut'});
+    }
+
     return (
         <StyledAside>
             <aside className="aside">
@@ -115,21 +130,21 @@ function Aside():JSX.Element {
                         <ul className="aside__hidden-list">
                             <li className="aside__hidden-item">go to profile</li>
                             <li className="aside__hidden-item">support</li>
-                            <li className="aside__hidden-item">log out</li>
+                            <li className="aside__hidden-item" onClick={logout}>log out</li>
                         </ul>
                     </div>
                 </header>
 
                 <nav className="nav">
                     <ul className="aside__menu">
-                        <li className="aside__menu-item"><AiOutlineHome className='aside__icon aside__home-icon'/>HOME</li>
-                        <li className="aside__menu-item"><BsFillChatDotsFill className='aside__icon aside__chat-icon'/>CHAT</li>
-                        <li className="aside__menu-item"><IoIosNotificationsOutline className='aside__icon aside__notif-icon'/>NOTIFICATIONS</li>
-                        <li className="aside__menu-item"><FiSettings className='aside__icon aside__settings-icon'/>SETTINGS</li>
-                        <li className="aside__menu-item"><BiSupport className='aside__icon aside__support-icon'/>SUPPORT</li>
+                        <li className="aside__menu-item" onClick={() => navigate(PATH.homePage)}><AiOutlineHome className='aside__icon aside__home-icon'/>HOME</li>
+                        <li className="aside__menu-item" onClick={() => navigate(PATH.chat)}><BsFillChatDotsFill className='aside__icon aside__chat-icon'/>CHAT</li>
+                        <li className="aside__menu-item" onClick={() => navigate(PATH.notification)}><IoIosNotificationsOutline className='aside__icon aside__notif-icon'/>NOTIFICATIONS</li>
+                        <li className="aside__menu-item" onClick={() => navigate(PATH.settings)}><FiSettings className='aside__icon aside__settings-icon'/>SETTINGS</li>
+                        <li className="aside__menu-item" onClick={() => navigate(PATH.support)}><BiSupport className='aside__icon aside__support-icon'/>SUPPORT</li>
                     </ul>
                 </nav>
-                <div className="aside__logout-wrapper">
+                <div className="aside__logout-wrapper" onClick={logout}>
                     <div className="aside__logout"><BiLogOut className='aside__icon aside__logout-icon'/>LOG OUT</div>
                 </div>
             </aside>
