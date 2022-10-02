@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from 'styled-components';
-import Aside from "../Components/Aside";
+import { useSelector } from 'react-redux';
+import { loggedUserName } from '../store/selectors/userSelectors'; 
 
-const StyledWebSock = styled.div `
+const StyledChat = styled.div `
     .form__wrapper {
-        position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         height: 100%;
         display: flex;
@@ -45,16 +43,28 @@ const StyledWebSock = styled.div `
         border: none;
         outline: none;
         margin-right: 10px;
+        background-color: #04C45C;
+        font-weight: bold;
+        font-size: 25px;
+        border-radius: 5px;
+        color: #fff;
+        transition: 0.2s ease-in;
+        cursor: pointer;
+    }
+    .form__btn:hover {
+        transform: scale(1.1);
+        background-color: #0e994f;
+        box-shadow: 0 0 60px #6eb48f;
     }
 `
 
-function Home() {
+function Chat() {
 
     const [messages, setMessages] = useState([]);
     const [messageValue, setMessageValue] = useState('');
     const [connected, setConnected] = useState(false);
-    const [userName, setUserName] = useState('');
     const socket = useRef();
+    const userName = useSelector(loggedUserName);
 
     function connect() {
         socket.current = new WebSocket('ws://localhost:5000');
@@ -94,27 +104,18 @@ function Home() {
 
     if(!connected) {
         return (
-            <StyledWebSock>
-                <Aside/>
+            <StyledChat>
                 <div className="form__wrapper">
                     <div>
-                        <input 
-                        value={userName} 
-                        onChange={(e) => 
-                        setUserName(e.target.value)} 
-                        className="form__input" 
-                        type="text" 
-                        placeholder="Введите ваше имя" />
                         <button className="form__btn" onClick={connect}>Войти в комнату</button>
                     </div>
                 </div>
-            </StyledWebSock>
+            </StyledChat>
         )
     }
 
     return (
-        <StyledWebSock>
-            <Aside/>
+        <StyledChat>
             <div className="form__wrapper">
                 <div>
                     <div className="messages">
@@ -122,10 +123,10 @@ function Home() {
                             <div key={message.id}>
                                 {message.event === 'connection'
                                     ? <div className="message_connection">
-                                        Пользователь {message.userName} подключился
+                                        Пользователь {userName} подключился
                                     </div>
                                     : <div className="message">
-                                        <span className="username">{message.userName}</span> {message.message}
+                                        <span className="username">{userName}</span> {message.message}
                                     </div>
                                 }
                             </div>
@@ -137,8 +138,8 @@ function Home() {
                     </div>
                 </div>
             </div>
-        </StyledWebSock>
+        </StyledChat>
     )
 }
 
-export default Home;
+export default Chat;
