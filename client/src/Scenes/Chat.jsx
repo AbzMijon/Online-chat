@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { loggedUserName } from '../store/selectors/userSelectors'; 
 import lightBG from '../assets/img/lightBG.jpg';
+import darkBgMain from '../assets/img/darkBgMain.jpg';
+import darkBackground from '../assets/img/darkBackground.jpg';
+import defautAvatar from '../assets/img/defaultAvatar.jpg';
 
 const StyledChat = styled.div `
     .form__wrapper {
@@ -11,7 +14,7 @@ const StyledChat = styled.div `
         display: flex;
         justify-content: center;
         align-items: center;
-        background: url(${lightBG});
+        background: url(${darkBackground}) center;
     }
     .container {
         width: 650px;
@@ -47,7 +50,7 @@ const StyledChat = styled.div `
         position: relative;
         flex-wrap: wrap;
     }
-    .message_connection {
+    .message__connection {
         margin: 15px 0;
         color: #fff;
         text-align: center;
@@ -63,6 +66,7 @@ const StyledChat = styled.div `
         padding: 20px 25px;
         border-radius: 10px;
         background-color: #212121;
+        border: 1px solid #363636;
         position: absolute;
         bottom: 30px;
         left: 50%;
@@ -80,7 +84,7 @@ const StyledChat = styled.div `
         outline: none;
         background-color: transparent;
         font-size: 15px;
-        color: #535353;
+        color: #fff;
     }
     .form__btn-in {
         padding: 10px 15px;
@@ -99,6 +103,20 @@ const StyledChat = styled.div `
         transform: scale(1.1);
         background-color: #0e994f;
         box-shadow: 0 0 60px #6eb48f;
+    }
+    .message__avatar {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        margin-left: 5px;
+    }
+    .message__avatar-mess {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        position: absolute;
+        bottom: -5px;
+        left: -30px;
     }
 `
 
@@ -168,11 +186,12 @@ function Chat() {
                         {messages.map(message =>
                             <div key={message.id}>
                                 {message.event === 'connection'
-                                    ? <div className="message_connection">
-                                        Пользователь {userName} подключился
+                                    ? <div className="message__connection">
+                                        Пользователь <img src={defautAvatar} alt="" className="message__avatar"/> {userName} подключился
                                     </div>
                                     : <div className="message">
                                         <span className="username">{userName}</span> {message.message}
+                                        <img src={defautAvatar} alt="" className="message__avatar-mess"/>
                                     </div>
                                 }
                             </div>

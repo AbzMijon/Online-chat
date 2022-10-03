@@ -16,7 +16,7 @@ const StyledAside = styled.div`
     .aside {
         position: relative;
         padding: 60px 40px;
-        background-color: #fff;
+        background-color: #131014;
         border-right: 1px solid #c7c7c7;
         height: 100%;
     }
@@ -46,10 +46,12 @@ const StyledAside = styled.div`
         font-size: 15px;
         font-weight: bold;
         letter-spacing: 1px;
+        color: #c7c7c7;
     }
     .aside__name-arrow {
         font-size: 18px;
         font-weight: bold;
+        color: #c7c7c7;
     }
     .aside__hidden-block {
         display: none;
@@ -66,6 +68,7 @@ const StyledAside = styled.div`
         font-size: 12px;
         text-transform: uppercase;
         cursor: pointer;
+        color: #c7c7c7;
     } 
     .aside__hidden-item:hover {
         color: #04C45C;
@@ -80,7 +83,7 @@ const StyledAside = styled.div`
         font-size: 15px;
         letter-spacing: 2px;
         font-weight: bold;
-        border: 1px solid transparent;
+        border-bottom: 1px solid transparent;
     }
     .aside__menu-item:hover {
         border-bottom: 1px solid #04C45C;
@@ -89,6 +92,18 @@ const StyledAside = styled.div`
     .aside__icon {
         font-size: 17px;
         margin-right: 15px;
+    }
+    .aside__menu-item--active {
+        cursor: pointer;
+        transition: 0.2s ease-in;
+        padding: 15px 5px;
+        display: flex;
+        align-items: center;
+        font-size: 15px;
+        letter-spacing: 2px;
+        font-weight: bold;
+        border-bottom: 1px solid #04C45C;
+        color: #04C45C;
     }
     .aside__logout {
         position: absolute;
@@ -115,6 +130,7 @@ function Aside():JSX.Element {
     const logout = () => {
         dispatch({type: 'userLogOut'});
     }
+    const location = window.location.pathname;    
 
     return (
         <StyledAside>
@@ -137,11 +153,31 @@ function Aside():JSX.Element {
 
                 <nav className="nav">
                     <ul className="aside__menu">
-                        <li className="aside__menu-item" onClick={() => navigate(PATH.homePage)}><AiOutlineHome className='aside__icon aside__home-icon'/>HOME</li>
-                        <li className="aside__menu-item" onClick={() => navigate(PATH.chat)}><BsFillChatDotsFill className='aside__icon aside__chat-icon'/>CHAT</li>
-                        <li className="aside__menu-item" onClick={() => navigate(PATH.notification)}><IoIosNotificationsOutline className='aside__icon aside__notif-icon'/>NOTIFICATIONS</li>
-                        <li className="aside__menu-item" onClick={() => navigate(PATH.settings)}><FiSettings className='aside__icon aside__settings-icon'/>SETTINGS</li>
-                        <li className="aside__menu-item" onClick={() => navigate(PATH.support)}><BiSupport className='aside__icon aside__support-icon'/>SUPPORT</li>
+                        <li className={location === PATH.homePage
+                            ? 'aside__menu-item--active' 
+                            : 'aside__menu-item'} 
+                            onClick={() => navigate(PATH.homePage)}>
+                            <AiOutlineHome className='aside__icon aside__home-icon'/>HOME</li>
+                        <li className={location === PATH.chat 
+                            ? 'aside__menu-item--active' 
+                            : 'aside__menu-item'} 
+                            onClick={() => navigate(PATH.chat)}>
+                            <BsFillChatDotsFill className='aside__icon aside__chat-icon'/>CHAT</li>
+                        <li className={location === PATH.notification 
+                            ? 'aside__menu-item--active' 
+                            : 'aside__menu-item'} 
+                            onClick={() => navigate(PATH.notification)}>
+                            <IoIosNotificationsOutline className='aside__icon aside__notif-icon'/>NOTIFICATIONS</li>
+                        <li className={location === PATH.settings 
+                            ? 'aside__menu-item--active' 
+                            : 'aside__menu-item'} 
+                            onClick={() => navigate(PATH.settings)}>
+                            <FiSettings className='aside__icon aside__settings-icon'/>SETTINGS</li>
+                        <li className={location === PATH.support 
+                            ? 'aside__menu-item--active' 
+                            : 'aside__menu-item'} 
+                            onClick={() => navigate(PATH.support)}>
+                            <BiSupport className='aside__icon aside__support-icon'/>SUPPORT</li>
                     </ul>
                 </nav>
                 <div className="aside__logout-wrapper" onClick={logout}>

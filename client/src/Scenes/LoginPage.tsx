@@ -117,7 +117,7 @@ function LoginPage():JSX.Element {
             errorsObject.name = 'The field must not be empty'
         }
 
-        if(dontHaveAcc && formValues.name.length > 11) {
+        if(dontHaveAcc && formValues.name.length > 15) {
             isPassed = false;
             errorsObject.name = 'The name must be less'
         }
