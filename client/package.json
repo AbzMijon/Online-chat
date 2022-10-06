@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "server": "json-server ./fakeServer/db.json -m ./node_modules/json-server-auth --port 8000"
   },
   "repository": {
     "type": "git",
@@ -41,10 +42,13 @@
     "axios": "^0.27.2",
     "formik": "^2.2.9",
     "html-webpack-plugin": "^5.5.0",
+    "json-server": "^0.17.0",
+    "json-server-auth": "^2.1.0",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.4.0",
+    "react-loader-spinner": "^5.3.4",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.3.0",
     "redux": "^4.2.0",

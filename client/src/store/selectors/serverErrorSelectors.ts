@@ -1,0 +1,2 @@
+export const isServerError = (state: { server: { isError: boolean; }; }) => state.server.isError;
+export const serverErrorMessage = (state: { server: { errorMessage: string; }; }) => state.server.errorMessage;

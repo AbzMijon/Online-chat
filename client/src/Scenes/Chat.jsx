@@ -3,9 +3,10 @@ import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { loggedUserName } from '../store/selectors/userSelectors'; 
 import lightBG from '../assets/img/lightBG.jpg';
-import darkBgMain from '../assets/img/darkBgMain.jpg';
 import darkBackground from '../assets/img/darkBackground.jpg';
 import defautAvatar from '../assets/img/defaultAvatar.jpg';
+import { AiOutlineSend } from 'react-icons/ai';
+import Spinner from "../Components/Spinner";
 
 const StyledChat = styled.div `
     .form__wrapper {
@@ -76,7 +77,11 @@ const StyledChat = styled.div `
         align-items: center;
     }
     .form__btn {
-        
+        border: none;
+        outline: none;
+        background-color: transparent;
+        font-size: 20px;
+        color: #a3a3a3;
     }
     .form__input {
         width: 85%;
@@ -91,7 +96,7 @@ const StyledChat = styled.div `
         border: none;
         outline: none;
         margin-right: 10px;
-        background-color: #04C45C;
+        background-color: #a3a3a3;
         font-weight: bold;
         font-size: 25px;
         border-radius: 5px;
@@ -101,8 +106,7 @@ const StyledChat = styled.div `
     }
     .form__btn-in:hover {
         transform: scale(1.1);
-        background-color: #0e994f;
-        box-shadow: 0 0 60px #6eb48f;
+        box-shadow: 0 0 6px #949494;
     }
     .message__avatar {
         width: 25px;
@@ -124,7 +128,7 @@ function Chat() {
 
     const [messages, setMessages] = useState([]);
     const [messageValue, setMessageValue] = useState('');
-    const [connected, setConnected] = useState(false);
+    const [connected, setConnected] = useState(false);//spinner
     const socket = useRef();
     const userName = useSelector(loggedUserName);
 
@@ -151,7 +155,22 @@ function Chat() {
         socket.current.onerror = () => {
             console.log('Socket ошибка');
         }
-    }
+    }   
+    useEffect(() => {
+        connect();
+    }, []);
+    
+/*     useEffect(() => {
+        const messagesText = messages.filter(message => message.message);
+        if(messagesText.length) {
+            axios.post('http://localhost:8000/messages/', {
+                event: "message",
+                id: Math.round(Math.random() * 1000),
+                message: messageValue,
+                userName: userName,
+            })
+        }
+    }, [messages]); */
 
     const sendMessage = () => {
         const message = {
@@ -167,15 +186,7 @@ function Chat() {
     }
 
     if(!connected) {
-        return (
-            <StyledChat>
-                <div className="form__wrapper">
-                    <div>
-                        <button className="form__btn-in" onClick={connect}>Connect to room</button>
-                    </div>
-                </div>
-            </StyledChat>
-        )
+        return <Spinner/>
     }
 
     return (
@@ -207,7 +218,7 @@ function Chat() {
                         className="form__input" 
                         placeholder="Message.." 
                         type="text"/>
-                        <button className="form__btn" onClick={sendMessage}>Send</button>
+                        <button className="form__btn" onClick={sendMessage}><AiOutlineSend/></button>
                     </div>
                 </div>
             </div>

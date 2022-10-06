@@ -71,7 +71,7 @@ const StyledAside = styled.div`
         color: #c7c7c7;
     } 
     .aside__hidden-item:hover {
-        color: #04C45C;
+        color: #fff;
     }
     .aside__menu-item {
         color: #5c5c5c;
@@ -86,8 +86,8 @@ const StyledAside = styled.div`
         border-bottom: 1px solid transparent;
     }
     .aside__menu-item:hover {
-        border-bottom: 1px solid #04C45C;
-        color: #04C45C;
+        border-bottom: 1px solid #fff;
+        color: #fff;
     }
     .aside__icon {
         font-size: 17px;
@@ -102,8 +102,8 @@ const StyledAside = styled.div`
         font-size: 15px;
         letter-spacing: 2px;
         font-weight: bold;
-        border-bottom: 1px solid #04C45C;
-        color: #04C45C;
+        border-bottom: 1px solid #fff;
+        color: #fff;
     }
     .aside__logout {
         position: absolute;
