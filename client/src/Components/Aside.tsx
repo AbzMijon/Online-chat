@@ -12,7 +12,7 @@ import defautAvatar from '../assets/img/defaultAvatar.jpg';
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../constans/routes";
 
-const StyledAside = styled.div`
+const StyledAside = styled.div `
     .aside {
         position: relative;
         padding: 60px 40px;
@@ -61,7 +61,9 @@ const StyledAside = styled.div`
         position: absolute;
         padding: 5px 10px;
         border-radius: 5px;
-        border: 1px solid #c7c7c7;
+        border-bottom: 1px solid #c7c7c7;
+        border-right: 1px solid #c7c7c7;
+        border-left: 1px solid #c7c7c7;
         bottom: -36%;
         left: 50%;
         transform: translate(-50%);

@@ -7,6 +7,8 @@ import darkBackground from '../assets/img/darkBackground.jpg';
 import defautAvatar from '../assets/img/defaultAvatar.jpg';
 import { AiOutlineSend } from 'react-icons/ai';
 import Spinner from "../Components/Spinner";
+import EmojiPicker from 'emoji-picker-react';
+import { BiSmile } from 'react-icons/bi';
 
 const StyledChat = styled.div `
     .form__wrapper {
@@ -82,6 +84,15 @@ const StyledChat = styled.div `
         background-color: transparent;
         font-size: 20px;
         color: #a3a3a3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .form__btn:hover {
+        color: #fff;
+    }
+    .form__btn-smile {
+        font-size: 25px;
     }
     .form__input {
         width: 85%;
@@ -122,6 +133,11 @@ const StyledChat = styled.div `
         bottom: -5px;
         left: -30px;
     }
+    .emoji {
+        position: absolute;
+        bottom: 120px;
+        left: 0px;
+    }
 `
 
 function Chat() {
@@ -131,6 +147,7 @@ function Chat() {
     const [connected, setConnected] = useState(false);//spinner
     const socket = useRef();
     const userName = useSelector(loggedUserName);
+    const [handleStiker, setHandleStiker] = useState(false);
 
     function connect() {
         socket.current = new WebSocket('ws://localhost:5000');
@@ -209,6 +226,7 @@ function Chat() {
                         )}
                     </div>
                     <div className="form">
+                        <button className="form__btn form__btn-smile" type="button" onClick={() => setHandleStiker(!handleStiker)}><BiSmile/></button>
                         <input value={messageValue} onKeyDown={(keyPress) => {
                             if(keyPress.keyCode === 13) {
                                 sendMessage();
@@ -218,7 +236,15 @@ function Chat() {
                         className="form__input" 
                         placeholder="Message.." 
                         type="text"/>
-                        <button className="form__btn" onClick={sendMessage}><AiOutlineSend/></button>
+                        <button type="button" className="form__btn" onClick={sendMessage}><AiOutlineSend/></button>
+                    </div>
+                    <div className="emoji">
+                        {handleStiker && <EmojiPicker
+                            Theme='dark'
+                            onEmojiClick={(emojiObj) => setMessageValue((prevMessage) => prevMessage + emojiObj.emoji)}
+                            className='message__emojipicker'
+                            />
+                        }
                     </div>
                 </div>
             </div>

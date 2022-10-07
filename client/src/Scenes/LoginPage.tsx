@@ -5,6 +5,8 @@ import LoginFormikInput from "../Components/FormikInputs/LoginFormikInput";
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../constans/routes'; 
+import { randomInteger } from "../helpers/randomInteger";
+import { userColor } from "../constans/userColors";
 
 const StyledLoginPage = styled.div `
     .login {
@@ -83,17 +85,24 @@ function LoginPage():JSX.Element {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const randColor = () => {
+        const num = randomInteger(0, userColor.length - 2);
+        return userColor[num];
+    };
+
     type initialFormvaluesTypes = {
         name: string,
         email: string,
         password: string,
         id: number | string,
+        color: string,
     }
     const initialFormValues:initialFormvaluesTypes = {
         name: '',
         email: '',
         password: '',
         id: Math.round(Math.random() * 1000),
+        color: '',
     }
 
     type formValueTypes = {
@@ -106,6 +115,7 @@ function LoginPage():JSX.Element {
         email: string,
         password: string,
         id: number | string,
+        color: string,
     }
 
     const validateForm = (formValues:validateFormTypes):formValueTypes | void => {
@@ -156,7 +166,8 @@ function LoginPage():JSX.Element {
                                 name: formvalues.name, 
                                 email: formvalues.email, 
                                 password: formvalues.password, 
-                                id: Math.round(Math.random() * 1000)
+                                id: Math.round(Math.random() * 1000),
+                                color: randColor(),
                             }})
                             navigate(PATH.homePage);
                     }}>

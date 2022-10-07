@@ -5,11 +5,12 @@ import { Provider } from 'react-redux/es/exports';
 import { store, persistor } from "./store/initStore";
 import { PersistGate } from "redux-persist/es/integration/react";
 import GlobalServerError from "./HOC/GlobalServerError";
+import Spinner from "./Components/Spinner";
 
 function App() {
     return (
         <Provider store={store}>
-            <PersistGate persistor={persistor} loading={'loading...'}>
+            <PersistGate persistor={persistor} loading={<Spinner/>}>
                 <BrowserRouter>
                     <GlobalServerError>
                         <RootRoute/>
