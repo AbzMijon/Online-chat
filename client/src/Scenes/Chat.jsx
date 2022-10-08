@@ -9,6 +9,7 @@ import { AiOutlineSend } from 'react-icons/ai';
 import Spinner from "../Components/Spinner";
 import EmojiPicker from 'emoji-picker-react';
 import { BiSmile } from 'react-icons/bi';
+import { userColor } from "../store/selectors/userSelectors";
 
 const StyledChat = styled.div `
     .form__wrapper {
@@ -137,6 +138,7 @@ const StyledChat = styled.div `
         position: absolute;
         bottom: 120px;
         left: 0px;
+        transition: 0.2s ease-in;
     }
 `
 
@@ -144,9 +146,10 @@ function Chat() {
 
     const [messages, setMessages] = useState([]);
     const [messageValue, setMessageValue] = useState('');
-    const [connected, setConnected] = useState(false);//spinner
+    const [connected, setConnected] = useState(false);
     const socket = useRef();
     const userName = useSelector(loggedUserName);
+    const nameColor = useSelector(userColor);
     const [handleStiker, setHandleStiker] = useState(false);
 
     function connect() {
@@ -200,6 +203,11 @@ function Chat() {
             socket.current.send(JSON.stringify(message));
             setMessageValue('');
         }
+        setHandleStiker(false);
+    }
+
+    const logicUserColor = {
+        color: `${nameColor}`
     }
 
     if(!connected) {
@@ -217,8 +225,8 @@ function Chat() {
                                     ? <div className="message__connection">
                                         Пользователь <img src={defautAvatar} alt="" className="message__avatar"/> {userName} подключился
                                     </div>
-                                    : <div className="message">
-                                        <span className="username">{userName}</span> {message.message}
+                                    : <div className={`message`}>
+                                        <span style={logicUserColor} className="username">{userName}</span> {message.message}
                                         <img src={defautAvatar} alt="" className="message__avatar-mess"/>
                                     </div>
                                 }
@@ -232,7 +240,10 @@ function Chat() {
                                 sendMessage();
                             }
                         }}
-                        onChange={(e) => setMessageValue(e.target.value)} 
+                        onChange={(e) => {
+                            setMessageValue(e.target.value);
+                            setHandleStiker(false);
+                        }} 
                         className="form__input" 
                         placeholder="Message.." 
                         type="text"/>

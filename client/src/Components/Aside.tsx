@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { AiOutlineHome } from 'react-icons/ai';
 import { BsFillChatDotsFill } from 'react-icons/bs';
-import { IoIosNotificationsOutline } from 'react-icons/io';
 import { FiSettings } from 'react-icons/fi';
+import { FaUsers } from 'react-icons/fa';
 import { BiSupport, BiLogOut } from 'react-icons/bi';
 import { loggedUserName } from "../store/selectors/userSelectors";
 import { useSelector, useDispatch } from "react-redux";
@@ -165,11 +165,11 @@ function Aside():JSX.Element {
                             : 'aside__menu-item'} 
                             onClick={() => navigate(PATH.chat)}>
                             <BsFillChatDotsFill className='aside__icon aside__chat-icon'/>CHAT</li>
-                        <li className={location === PATH.notification 
+                        <li className={location === PATH.users 
                             ? 'aside__menu-item--active' 
                             : 'aside__menu-item'} 
-                            onClick={() => navigate(PATH.notification)}>
-                            <IoIosNotificationsOutline className='aside__icon aside__notif-icon'/>NOTIFICATIONS</li>
+                            onClick={() => navigate(PATH.users)}>
+                            <FaUsers className='aside__icon aside__notif-icon'/>USERS</li>
                         <li className={location === PATH.settings 
                             ? 'aside__menu-item--active' 
                             : 'aside__menu-item'} 

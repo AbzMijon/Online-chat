@@ -8,7 +8,7 @@ import MainLayout from '../Layouts/MainLayout';
 import LoginPage from '../Scenes/LoginPage';
 import Home from '../Scenes/Home';
 import Chat from '../Scenes/Chat';
-import Notifications from '../Scenes/Notifications';
+import Users from '../Scenes/Users';
 import Settings from '../Scenes/Settings';
 import Support from '../Scenes/Support'; 
 
@@ -31,8 +31,8 @@ function RootRoute() {
             <Route path={ROUTES.chat} element={renderedForGuest(<MainLayout/>)}>
                 <Route path={ROUTES.chat} element={<Chat/>}></Route>
             </Route>
-            <Route path={ROUTES.notification} element={renderedForGuest(<MainLayout/>)}>
-                <Route path={ROUTES.notification} element={<Notifications/>}></Route>
+            <Route path={ROUTES.users} element={renderedForGuest(<MainLayout/>)}>
+                <Route path={ROUTES.users} element={<Users/>}></Route>
             </Route>
             <Route path={ROUTES.settings} element={renderedForGuest(<MainLayout/>)}>
                 <Route path={ROUTES.settings} element={<Settings/>}></Route>
