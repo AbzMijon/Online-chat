@@ -5,11 +5,13 @@ import { loggedUserName } from '../store/selectors/userSelectors';
 import lightBG from '../assets/img/lightBG.jpg';
 import darkBackground from '../assets/img/darkBackground.jpg';
 import defautAvatar from '../assets/img/defaultAvatar.jpg';
-import { AiOutlineSend } from 'react-icons/ai';
+import { AiOutlineSend, AiFillCrown } from 'react-icons/ai';
 import Spinner from "../Components/Spinner";
 import EmojiPicker from 'emoji-picker-react';
 import { BiSmile } from 'react-icons/bi';
 import { userColor } from "../store/selectors/userSelectors";
+import axios from 'axios';
+import  { BsSearch } from 'react-icons/bs';
 
 const StyledChat = styled.div `
     .form__wrapper {
@@ -19,6 +21,7 @@ const StyledChat = styled.div `
         justify-content: center;
         align-items: center;
         background: url(${darkBackground}) center;
+        position: relative;
     }
     .container {
         width: 650px;
@@ -44,15 +47,24 @@ const StyledChat = styled.div `
     .messages::-webkit-scrollbar {
         width: 0;
     }
-    .message {
+    .mess-me, .mess-another {
         margin: 10px 3px;
         padding: 5px 15px 8px 15px;
         display: inline-flex;
         flex-direction: column;
-        border-radius: 12px 12px 12px 0;
         background-color: #ffffff;
         position: relative;
         flex-wrap: wrap;
+    }
+    .mess-me {
+        border-radius: 12px 12px 12px 0;
+    }
+    .mess-another {
+        border-radius: 12px 12px 0px 12px;
+    }
+    .message-another {
+        display: flex;
+        justify-content: end;
     }
     .message__connection {
         margin: 15px 0;
@@ -126,19 +138,87 @@ const StyledChat = styled.div `
         border-radius: 50%;
         margin-left: 5px;
     }
-    .message__avatar-mess {
+    .message__avatar-mess--me, .message__avatar-mess--another {
         width: 25px;
         height: 25px;
         border-radius: 50%;
         position: absolute;
         bottom: -5px;
+    }
+    .message__avatar-mess--me {
         left: -30px;
+    }
+    .message__avatar-mess--another {
+        right: -30px;
     }
     .emoji {
         position: absolute;
         bottom: 120px;
         left: 0px;
         transition: 0.2s ease-in;
+    }
+    .chat__name {
+        font-size: 19px;
+        text-align: center;
+        color: #c4c4c4;
+    }
+    .header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #1a1a1a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border-bottom: 1px solid #c4c4c4;
+        padding: 10px 0;
+        z-index: 3;
+    }
+    .chat__users {
+        color: #d4d4d4;
+    }
+    .main {
+        margin-top: 60px;
+    }
+    .chat__search {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .chat__search-icon {
+        font-size: 25px;
+        color: #e9e9e9;
+        cursor: pointer;
+    }
+    .chat__search-input {
+        border: none;
+        outline: none;
+        background-color: #212121;
+        font-size: 22px;
+        color: #949494;
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-right: 15px;
+    }
+    .chat__maxlvl {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 50px;
+        color: #e4e4e4;
+        font-size: 17px;
+        display: flex;
+        align-items: center;
+    }
+    .crown {
+        color: #b1b112;
+        margin-right: 5px;
     }
 `
 
@@ -151,6 +231,7 @@ function Chat() {
     const userName = useSelector(loggedUserName);
     const nameColor = useSelector(userColor);
     const [handleStiker, setHandleStiker] = useState(false);
+    const [users, setUsers] = useState(0);
 
     function connect() {
         socket.current = new WebSocket('ws://localhost:5000');
@@ -179,6 +260,14 @@ function Chat() {
     useEffect(() => {
         connect();
     }, []);
+    useEffect(() => {
+        axios.get('http://localhost:8000/users').then(response => {
+            console.log(response.data);
+            response.data.map((user) => {
+                setUsers(users + 1);
+            })
+        })
+    }, [users]);
     
 /*     useEffect(() => {
         const messagesText = messages.filter(message => message.message);
@@ -217,46 +306,57 @@ function Chat() {
     return (
         <StyledChat>
             <div className="form__wrapper">
+                <header className="header">
+                    <h4 className="chat__maxlvl"><AiFillCrown className="crown"/> 1000 lvl+: 0</h4>
+                    <h2 className="chat__name">Единственный Всемирный чат</h2>
+                    <h5 className="chat__users">Участников: {users}</h5>
+                    <div className="chat__search">
+                        <input type="text" className="chat__search-input" placeholder="Поиск.." />
+                        <BsSearch className="chat__search-icon"/>
+                    </div>
+                </header>
                 <div className="container">
-                    <div className="messages">
-                        {messages.map(message =>
-                            <div key={message.id}>
-                                {message.event === 'connection'
-                                    ? <div className="message__connection">
-                                        Пользователь <img src={defautAvatar} alt="" className="message__avatar"/> {userName} подключился
-                                    </div>
-                                    : <div className={`message`}>
-                                        <span style={logicUserColor} className="username">{userName}</span> {message.message}
-                                        <img src={defautAvatar} alt="" className="message__avatar-mess"/>
-                                    </div>
+                    <main className="main">
+                        <div className="messages">
+                            {messages.map(message =>
+                                <div key={message.id} className={(message.userName !== userName) && (message.event !== 'connection') ? `message-another` : `message-me`}>
+                                    {message.event === 'connection'
+                                        ? <div className="message__connection">
+                                            Пользователь <img src={defautAvatar} alt="" className="message__avatar"/> {userName} подключился
+                                        </div>
+                                        : <div className={message.userName !== userName ? 'mess-another' : 'mess-me'}>
+                                            <span style={logicUserColor} className="username">{userName}</span> {message.message}
+                                            <img src={defautAvatar} alt="" className={message.userName !== userName ? "message__avatar-mess--another" : "message__avatar-mess--me"}/>
+                                        </div>
+                                    }
+                                </div>
+                            )}
+                        </div>
+                        <div className="form">
+                            <button className="form__btn form__btn-smile" type="button" onClick={() => setHandleStiker(!handleStiker)}><BiSmile/></button>
+                            <input value={messageValue} onKeyDown={(keyPress) => {
+                                if(keyPress.keyCode === 13) {
+                                    sendMessage();
                                 }
-                            </div>
-                        )}
-                    </div>
-                    <div className="form">
-                        <button className="form__btn form__btn-smile" type="button" onClick={() => setHandleStiker(!handleStiker)}><BiSmile/></button>
-                        <input value={messageValue} onKeyDown={(keyPress) => {
-                            if(keyPress.keyCode === 13) {
-                                sendMessage();
+                            }}
+                            onChange={(e) => {
+                                setMessageValue(e.target.value);
+                                setHandleStiker(false);
+                            }} 
+                            className="form__input" 
+                            placeholder="Message.." 
+                            type="text"/>
+                            <button type="button" className="form__btn" onClick={sendMessage}><AiOutlineSend/></button>
+                        </div>
+                        <div className="emoji">
+                            {handleStiker && <EmojiPicker
+                                Theme='dark'
+                                onEmojiClick={(emojiObj) => setMessageValue((prevMessage) => prevMessage + emojiObj.emoji)}
+                                className='message__emojipicker'
+                                />
                             }
-                        }}
-                        onChange={(e) => {
-                            setMessageValue(e.target.value);
-                            setHandleStiker(false);
-                        }} 
-                        className="form__input" 
-                        placeholder="Message.." 
-                        type="text"/>
-                        <button type="button" className="form__btn" onClick={sendMessage}><AiOutlineSend/></button>
-                    </div>
-                    <div className="emoji">
-                        {handleStiker && <EmojiPicker
-                            Theme='dark'
-                            onEmojiClick={(emojiObj) => setMessageValue((prevMessage) => prevMessage + emojiObj.emoji)}
-                            className='message__emojipicker'
-                            />
-                        }
-                    </div>
+                        </div>
+                    </main>
                 </div>
             </div>
         </StyledChat>

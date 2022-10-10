@@ -121,6 +121,26 @@ const StyledAside = styled.div `
         border-bottom: 1px solid #851e1e;
         color: #851e1e;
     }
+    .aside__img {
+        position: relative;
+    }
+    .aside__lvl {
+        position: absolute;
+        bottom: 10px;
+        left: 5px;
+        border-radius: 50%;
+        border: 1px solid #851e1e;
+        text-align: center;
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #000000;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 `
 
 function Aside():JSX.Element {
@@ -139,7 +159,10 @@ function Aside():JSX.Element {
             <aside className="aside">
 
                 <header className="aside__header">
-                    <img src={defautAvatar} alt="avatar" className="aside__avatar"/>
+                    <div className="aside__img">
+                        <img src={defautAvatar} alt="avatar" className="aside__avatar"/>
+                        <div className="aside__lvl">0</div>
+                    </div>
                     <div className="aside__name-wrapper" onClick={() => setHandleName(!handleName)}>
                         <h5 className="aside__name">{userName}</h5>
                         <MdKeyboardArrowDown className="aside__name-arrow"/>
