@@ -4,7 +4,7 @@
   "description": "app",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "build": "npm run build",
     "dev": "webpack-dev-server",
     "server": "json-server ./fakeServer/db.json -m ./node_modules/json-server-auth --port 8000"
   },
