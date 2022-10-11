@@ -1,4 +1,12 @@
 {
   "messages": [],
-  "users": []
+  "users": [
+    {
+      "email": "asd@asdasd",
+      "password": "$2a$10$89EA1880PywsaaqNTRJiSOrpHCNpg2Ud1W7KpF1nriK0ZRooeSKAG",
+      "name": "Egorka__2005",
+      "level": 0,
+      "id": 1
+    }
+  ]
 }

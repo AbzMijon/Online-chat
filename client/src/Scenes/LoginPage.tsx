@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { PATH } from '../constans/routes'; 
 import { randomInteger } from "../helpers/randomInteger";
 import { userColor } from "../constans/userColors";
+import axios from "axios";
 
 const StyledLoginPage = styled.div `
     .login {
@@ -84,6 +85,7 @@ function LoginPage():JSX.Element {
     const [dontHaveAcc, setDontHaveAcc] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [loginError, setLoginError] = useState('');
 
     const randColor = () => {
         const num = randomInteger(0, userColor.length - 2);
@@ -159,17 +161,26 @@ function LoginPage():JSX.Element {
                 <h5 className="login__subtitle">{dontHaveAcc ? 'Welcome, dear user!' : 'Welcome back'}</h5>
                 <h3 className="login__title">{dontHaveAcc ? 'Let`s create your account' : 'Login to your account'}</h3>
                     <Formik initialValues={initialFormValues} validate={validateForm} onSubmit={(formvalues:validateFormTypes) => {
-                        dispatch(
-                            {type: 'userLogIn', 
-                            payload: 
-                            {
-                                name: formvalues.name, 
-                                email: formvalues.email, 
-                                password: formvalues.password, 
-                                id: Math.round(Math.random() * 1000),
-                                color: randColor(),
-                            }})
-                            navigate(PATH.homePage);
+                        axios.post(`http://localhost:8000/${dontHaveAcc ? 'users' : 'login'}`, {
+                            name: formvalues.name,
+                            email: formvalues.email,
+                            password: formvalues.password,
+                            level: 0,
+                        }).then(() => {
+                            axios.get(`http://localhost:8000/users`).then(response => {
+                                const findUser = response.data.find(user => user.email === formvalues.email);
+                                dispatch(
+                                    {type: 'userLogIn', payload: 
+                                    {
+                                        name: dontHaveAcc ? formvalues.name : findUser.name, 
+                                        email: formvalues.email, 
+                                        password: formvalues.password, 
+                                        id: dontHaveAcc ? formvalues.id : findUser.id,
+                                        color: randColor(),
+                                    }})
+                                    navigate(PATH.homePage);
+                            })
+                        }).catch(error => error && setLoginError(error.response.data));
                     }}>
                         <Form>
                             {dontHaveAcc && <LoginFormikInput name='name' type='text' placeholder='Enter your name..' required  />}

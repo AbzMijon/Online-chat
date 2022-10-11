@@ -7,7 +7,7 @@ import { isLoggedIn } from '../store/selectors/userSelectors';
 import MainLayout from '../Layouts/MainLayout';
 import LoginPage from '../Scenes/LoginPage';
 import Home from '../Scenes/Home';
-import Chat from '../Scenes/Chat';
+import Chat from '../Scenes/Chat/Chat';
 import Users from '../Scenes/Users';
 import Settings from '../Scenes/Settings';
 import Support from '../Scenes/Support'; 
