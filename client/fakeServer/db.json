@@ -7,6 +7,20 @@
       "name": "Egorka__2005",
       "level": 0,
       "id": 1
+    },
+    {
+      "email": "alepidze@gmail.com",
+      "password": "$2a$10$ATigSEDOdefro4UxthD4eOY/C9CuRblRSoJcYAsLFR8LQxKMoMxwi",
+      "name": "asd",
+      "level": 0,
+      "id": 2
+    },
+    {
+      "email": "a@asd",
+      "password": "$2a$10$X35q0TqtbtjTNlrXdyO04.qHonseM3tA4m3Q0O5Tditfov24fJLwS",
+      "name": "AbzMijon",
+      "level": 0,
+      "id": 3
     }
   ]
 }

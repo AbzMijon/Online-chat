@@ -21,6 +21,7 @@ function Chat() {
     const nameColor = useSelector(userColor);
     const [handleStiker, setHandleStiker] = useState(false);
     const [users, setUsers] = useState(0);
+    const [amountUsers, setAmountUsers] = useState(0);
 
     function connect() {
         socket.current = new WebSocket('ws://localhost:5000');
@@ -51,12 +52,9 @@ function Chat() {
     }, []);
     useEffect(() => {
         axios.get('http://localhost:8000/users').then(response => {
-            console.log(response.data);
-            response.data.map((user) => {
-                setUsers(users + 1);
-            })
+            setAmountUsers(response.data.length);
         })
-    }, []);
+    }, [users]);
     
 /*     useEffect(() => {
         const messagesText = messages.filter(message => message.message);
@@ -98,7 +96,7 @@ function Chat() {
                 <header className="header">
                     <h4 className="chat__maxlvl"><AiFillCrown className="crown"/> 1000 lvl+: 0</h4>
                     <h2 className="chat__name">Единственный Всемирный чат</h2>
-                    <h5 className="chat__users">Участников: {users}</h5>
+                    <h5 className="chat__users">Участников: {amountUsers}</h5>
                     <div className="chat__search">
                         <input type="text" className="chat__search-input" placeholder="Поиск.." />
                         <BsSearch className="chat__search-icon"/>
@@ -139,7 +137,7 @@ function Chat() {
                         </div>
                         <div className="emoji">
                             {handleStiker && <EmojiPicker
-                                Theme='dark'
+                                theme='dark'
                                 onEmojiClick={(emojiObj) => setMessageValue((prevMessage) => prevMessage + emojiObj.emoji)}
                                 className='message__emojipicker'
                                 />

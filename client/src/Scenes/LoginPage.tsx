@@ -168,7 +168,7 @@ function LoginPage():JSX.Element {
                             level: 0,
                         }).then(() => {
                             axios.get(`http://localhost:8000/users`).then(response => {
-                                const findUser = response.data.find(user => user.email === formvalues.email);
+                                const findUser = response.data.find((user: { email: string; }) => user.email === formvalues.email);
                                 dispatch(
                                     {type: 'userLogIn', payload: 
                                     {
