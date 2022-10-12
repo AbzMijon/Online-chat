@@ -4,10 +4,12 @@
   "description": "app",
   "main": "index.js",
   "scripts": {
-    "build": "npm run build",
+    "build": "webpack",
     "dev": "webpack-dev-server",
     "server": "json-server ./client/fakeServer/db.json -m ./node_modules/json-server-auth --port 8000",
-    "ws": "nodemon ./server/websocket.js"
+    "ws": "nodemon ./server/websocket.js",
+    "deploy": "gh-pages -d dist",
+    "predeploy": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -23,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/AbzMijon/Webpack-Config/issues"
   },
-  "homepage": "https://github.com/AbzMijon/Webpack-Config#readme",
+  "homepage": "https://abzmijon.github.io/Online-chat/",
   "devDependencies": {
     "@babel/core": "^7.18.5",
     "@babel/preset-env": "^7.18.2",
@@ -39,17 +41,17 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.18.1",
-    "nodemon": "^2.0.20",
-    "ws": "^8.9.0",
     "@reduxjs/toolkit": "^1.8.3",
     "axios": "^0.27.2",
+    "cors": "^2.8.5",
     "emoji-picker-react": "^4.1.1",
+    "express": "^4.18.1",
     "formik": "^2.2.9",
+    "gh-pages": "^4.0.0",
     "html-webpack-plugin": "^5.5.0",
     "json-server": "^0.17.0",
     "json-server-auth": "^2.1.0",
+    "nodemon": "^2.0.20",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -62,6 +64,7 @@
     "sass": "^1.53.0",
     "sass-loader": "^13.0.2",
     "styled-components": "^5.3.6",
-    "webpack-dev-server": "^4.9.2"
+    "webpack-dev-server": "^4.9.2",
+    "ws": "^8.9.0"
   }
 }
