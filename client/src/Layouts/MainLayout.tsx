@@ -13,7 +13,7 @@ const StyledMainLayout = styled.div `
         background-color: #fff;
         border-radius: 5px;
         display: grid;
-        grid-template-columns: 350px 1fr;
+        grid-template-columns: 300px 1fr;
     }
 `
 

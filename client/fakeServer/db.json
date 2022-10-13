@@ -42,6 +42,27 @@
       "name": "AbzMijon",
       "level": 0,
       "id": 6
+    },
+    {
+      "email": "skill@gmail.com",
+      "password": "$2a$10$sEK2PxkUNc8df1ejpbF.H.2sO2P24xFO/8Ot/hFZIEKqqVMKa2alC",
+      "name": "SkillVill",
+      "level": 0,
+      "id": 7
+    },
+    {
+      "email": "br@gmail.com",
+      "password": "$2a$10$dDpHjQi0Kkih9qosbLjVHe0L4r2Kr0zSsD1Ih1cU./a4IAi8X6r3S",
+      "name": "brighnton",
+      "level": 0,
+      "id": 8
+    },
+    {
+      "email": "egorchiktop228@gmail.com",
+      "password": "$2a$10$iuohhtF.epV9VX9YZfbIH.qLrSwWTx.lTpk1RTxYonIrEL3fuAK1O",
+      "name": "AbzMijon",
+      "level": 0,
+      "id": 9
     }
   ]
 }

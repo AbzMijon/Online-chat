@@ -96,7 +96,6 @@ function LoginPage():JSX.Element {
         const num = randomInteger(0, userColor.length - 2);
         return userColor[num];
     };
-    console.log('updates');
     
     type initialFormvaluesTypes = {
         name: string,

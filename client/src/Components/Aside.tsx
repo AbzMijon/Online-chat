@@ -15,7 +15,7 @@ import { PATH } from "../constans/routes";
 const StyledAside = styled.div `
     .aside {
         position: relative;
-        padding: 60px 40px;
+        padding: 60px 50px;
         background-color: #131014;
         border-right: 1px solid #c7c7c7;
         height: 100%;
