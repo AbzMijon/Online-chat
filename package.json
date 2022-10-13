@@ -25,7 +25,7 @@
   "bugs": {
     "url": "https://github.com/AbzMijon/Webpack-Config/issues"
   },
-  "homepage": "https://abzmijon.github.io/Online-chat/",
+  "homepage": "",
   "devDependencies": {
     "@babel/core": "^7.18.5",
     "@babel/preset-env": "^7.18.2",

@@ -78,6 +78,11 @@ const StyledLoginPage = styled.div `
         margin: -5px 0 15px 0;
         cursor: pointer;
     }
+    .login__error {
+        text-align: center;
+        margin: 10px 0;
+        color:#bd3939;
+    }
 `
 
 function LoginPage():JSX.Element {
@@ -91,7 +96,8 @@ function LoginPage():JSX.Element {
         const num = randomInteger(0, userColor.length - 2);
         return userColor[num];
     };
-
+    console.log('updates');
+    
     type initialFormvaluesTypes = {
         name: string,
         email: string,
@@ -186,6 +192,7 @@ function LoginPage():JSX.Element {
                             {dontHaveAcc && <LoginFormikInput name='name' type='text' placeholder='Enter your name..' required  />}
                             <LoginFormikInput name='email' type='email' placeholder='Enter your email..' required />
                             <LoginFormikInput name='password' type='password' placeholder='Enter your password..' required />
+                            {loginError && <p className="login__error">{loginError}</p>}
                             <div className="login__texts">
                                 <p className="login__help">Help me!</p>
                                 <p className="login__forgot">Forgot password?</p>

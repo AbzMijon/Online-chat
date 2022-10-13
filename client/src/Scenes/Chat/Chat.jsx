@@ -10,6 +10,7 @@ import { userColor } from "../../store/selectors/userSelectors";
 import axios from 'axios';
 import  { BsSearch } from 'react-icons/bs';
 import { StyledChat } from "./StyledChat";
+import { ThreeDots } from "react-loader-spinner";
 
 function Chat() {
 
@@ -21,7 +22,7 @@ function Chat() {
     const nameColor = useSelector(userColor);
     const [handleStiker, setHandleStiker] = useState(false);
     const [users, setUsers] = useState(0);
-    const [amountUsers, setAmountUsers] = useState(0);
+    const [amountUsers, setAmountUsers] = useState(null);
 
     function connect() {
         socket.current = new WebSocket('ws://localhost:5000');
@@ -96,7 +97,18 @@ function Chat() {
                 <header className="header">
                     <h4 className="chat__maxlvl"><AiFillCrown className="crown"/> 1000 lvl+: 0</h4>
                     <h2 className="chat__name">Единственный Всемирный чат</h2>
-                    <h5 className="chat__users">Участников: {amountUsers}</h5>
+                    <h5 className="chat__users">Участников: {!amountUsers ?
+                        <ThreeDots
+                            height="20" 
+                            width="20" 
+                            radius="9"
+                            color="#fff" 
+                            ariaLabel="three-dots-loading"
+                            wrapperStyle={{}}
+                            visible={true}
+                            />
+                    : amountUsers}
+                    </h5>
                     <div className="chat__search">
                         <input type="text" className="chat__search-input" placeholder="Поиск.." />
                         <BsSearch className="chat__search-icon"/>

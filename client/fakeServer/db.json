@@ -21,6 +21,27 @@
       "name": "AbzMijon",
       "level": 0,
       "id": 3
+    },
+    {
+      "email": "dima@gmail.com",
+      "password": "$2a$10$ff7oC4UV1Av6Ukn6Ype8d.3Pw9iDJXRulgYU3v483PDqN.ND560aS",
+      "name": "Dmitryi111",
+      "level": 0,
+      "id": 4
+    },
+    {
+      "email": "qqq@gmail.co",
+      "password": "$2a$10$swEV0eDiz2RSFV3roCjlsuvtaKgvscl8tuedsI3A9aF0jShHDjfCK",
+      "name": "AbzMijon",
+      "level": 0,
+      "id": 5
+    },
+    {
+      "email": "Abz@asdasd",
+      "password": "$2a$10$aN6EOkF.FARKKkCTfj225ep32W1WfOvDE5Dx7RXf7CILPQ3gGjk5u",
+      "name": "AbzMijon",
+      "level": 0,
+      "id": 6
     }
   ]
 }

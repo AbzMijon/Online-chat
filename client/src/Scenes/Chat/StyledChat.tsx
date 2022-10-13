@@ -167,6 +167,7 @@ export const StyledChat = styled.div `
     }
     .chat__users {
         color: #d4d4d4;
+        display: flex;
     }
     .main {
         margin-top: 60px;
