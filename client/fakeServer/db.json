@@ -63,6 +63,20 @@
       "name": "AbzMijon",
       "level": 0,
       "id": 9
+    },
+    {
+      "email": "pro@gmail.com",
+      "password": "$2a$10$s14HWJ6agdcaq4uFxmT0xuMswZsV6kKLvk/2pwjmM1J8gJLjUuJfy",
+      "name": "ProAccount",
+      "level": 10,
+      "id": 10
+    },
+    {
+      "email": "vi@gmail.com",
+      "password": "$2a$10$WUjo6IVn.nLZdZfo3JZtj.ikXcfUEmGkTMgn2HQn52HEb267PuDFK",
+      "name": "Vivo",
+      "level": 8,
+      "id": 11
     }
   ]
 }

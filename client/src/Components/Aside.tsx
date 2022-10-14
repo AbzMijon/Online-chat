@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { AiOutlineHome } from 'react-icons/ai';
@@ -11,6 +11,9 @@ import { useSelector, useDispatch } from "react-redux";
 import defautAvatar from '../assets/img/defaultAvatar.jpg';
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../constans/routes";
+import { IdUser } from "../store/selectors/userSelectors";
+import { fetchUsers } from "../api/users";
+import { userlvlColor } from "../helpers/userlvlColor";
 
 const StyledAside = styled.div `
     .aside {
@@ -149,10 +152,21 @@ function Aside():JSX.Element {
     const [handleName, setHandleName] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [lvlColor, setLvlColor] = useState(0);
     const logout = () => {
         dispatch({type: 'userLogOut'});
     }
-    const location = window.location.pathname;    
+    const userId = useSelector(IdUser);
+    const location = window.location.pathname;   
+    
+    useEffect(() => {
+        fetchUsers().then(response => {
+            const findUser = response.data.find(user => {
+                return user.id === +userId;
+            })
+            setLvlColor(findUser.level);
+        })
+    }, []);
 
     return (
         <StyledAside>
@@ -161,7 +175,7 @@ function Aside():JSX.Element {
                 <header className="aside__header">
                     <div className="aside__img">
                         <img src={defautAvatar} alt="avatar" className="aside__avatar"/>
-                        <div className="aside__lvl">0</div>
+                        <div className="aside__lvl" style={{border: `1px solid ${userlvlColor(lvlColor)}`, color: `${userlvlColor(lvlColor)}`}}>{lvlColor}</div>
                     </div>
                     <div className="aside__name-wrapper" onClick={() => setHandleName(!handleName)}>
                         <h5 className="aside__name">{userName}</h5>
@@ -169,7 +183,6 @@ function Aside():JSX.Element {
                     </div>
                     <div className={handleName ? "aside__hidden-block--handle" : "aside__hidden-block"}>
                         <ul className="aside__hidden-list">
-                            <li className="aside__hidden-item">go to profile</li>
                             <li className="aside__hidden-item">support</li>
                             <li className="aside__hidden-item" onClick={logout}>log out</li>
                         </ul>
