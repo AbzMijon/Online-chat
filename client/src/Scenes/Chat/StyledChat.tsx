@@ -168,6 +168,7 @@ export const StyledChat = styled.div `
     .chat__users {
         color: #d4d4d4;
         display: flex;
+        cursor: pointer;
     }
     .main {
         margin-top: 60px;

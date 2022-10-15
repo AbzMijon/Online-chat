@@ -2,16 +2,16 @@ interface State {
     isLoggedIn: boolean,
     name: string,
     password: string,
-    id: number | string,
     color: string,
+    email: string,
 }
 export const userReducer = (state:State = 
     {
         isLoggedIn: false, 
         name: '', 
         password: '', 
-        id: '',
         color: '',
+        email: '',
     }, 
         action: 
             { 
@@ -20,8 +20,8 @@ export const userReducer = (state:State =
                     { 
                         name: string; 
                         password: string; 
-                        id: number | string; 
                         color: string,
+                        email: string,
                     } 
             }) => {
     switch(action.type) {
@@ -31,8 +31,8 @@ export const userReducer = (state:State =
                 isLoggedIn: true,
                 name: action.payload.name,
                 password: action.payload.password,
-                id: action.payload.id,
                 color: action.payload.color,
+                email: action.payload.email,
             };
             case 'userLogOut':
                 return {
@@ -40,8 +40,8 @@ export const userReducer = (state:State =
                 isLoggedIn: false,
                 name: '',
                 password: '',
-                id: '',
                 color: '',
+                email: '',
             };
             default:
                 return {...state};

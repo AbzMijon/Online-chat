@@ -77,6 +77,13 @@
       "name": "Vivo",
       "level": 8,
       "id": 11
+    },
+    {
+      "email": "evil@gmail.com",
+      "password": "$2a$10$kEm9gSNBpkwMJA6/k4Gppu2ZYAU8lYeYY/n2Vb8Zg6gcxRI9Hdylm",
+      "name": "TheEvil",
+      "level": 90,
+      "id": 12
     }
   ]
 }

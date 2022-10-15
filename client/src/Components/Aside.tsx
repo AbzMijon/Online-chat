@@ -11,9 +11,9 @@ import { useSelector, useDispatch } from "react-redux";
 import defautAvatar from '../assets/img/defaultAvatar.jpg';
 import { useNavigate } from "react-router-dom";
 import { PATH } from "../constans/routes";
-import { IdUser } from "../store/selectors/userSelectors";
 import { fetchUsers } from "../api/users";
 import { userlvlColor } from "../helpers/userlvlColor";
+import { userEmail } from "../store/selectors/userSelectors";
 
 const StyledAside = styled.div `
     .aside {
@@ -67,7 +67,7 @@ const StyledAside = styled.div `
         border-bottom: 1px solid #c7c7c7;
         border-right: 1px solid #c7c7c7;
         border-left: 1px solid #c7c7c7;
-        bottom: -36%;
+        bottom: -25%;
         left: 50%;
         transform: translate(-50%);
         font-size: 12px;
@@ -148,6 +148,7 @@ const StyledAside = styled.div `
 
 function Aside():JSX.Element {
 
+    const userMail = useSelector(userEmail);
     const userName = useSelector(loggedUserName);
     const [handleName, setHandleName] = useState(false);
     const navigate = useNavigate();
@@ -156,13 +157,13 @@ function Aside():JSX.Element {
     const logout = () => {
         dispatch({type: 'userLogOut'});
     }
-    const userId = useSelector(IdUser);
+    
     const location = window.location.pathname;   
     
     useEffect(() => {
         fetchUsers().then(response => {
             const findUser = response.data.find(user => {
-                return user.id === +userId;
+                return user.email === userMail;
             })
             setLvlColor(findUser.level);
         })
@@ -174,8 +175,8 @@ function Aside():JSX.Element {
 
                 <header className="aside__header">
                     <div className="aside__img">
-                        <img src={defautAvatar} alt="avatar" className="aside__avatar"/>
-                        <div className="aside__lvl" style={{border: `1px solid ${userlvlColor(lvlColor)}`, color: `${userlvlColor(lvlColor)}`}}>{lvlColor}</div>
+                        <img src={defautAvatar} alt="avatar" className="aside__avatar" style={{border: `4px solid ${userlvlColor(lvlColor)}`}}/>
+                        <div className="aside__lvl" style={{border: `2px solid ${userlvlColor(lvlColor)}`, color: `${userlvlColor(lvlColor)}`}}>{lvlColor}</div>
                     </div>
                     <div className="aside__name-wrapper" onClick={() => setHandleName(!handleName)}>
                         <h5 className="aside__name">{userName}</h5>

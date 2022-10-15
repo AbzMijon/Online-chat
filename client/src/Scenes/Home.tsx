@@ -18,9 +18,11 @@ const StyledHome = styled.div `
     .home__about {
         margin-bottom: 25px;
         text-align: center;
+        color: #000;
     }
     .home__about-list {
         margin-bottom: 80px;
+        color: #000;
     }
     .home__about-item {
         margin-bottom: 20px;
@@ -48,6 +50,7 @@ const StyledHome = styled.div `
     }
     .home__navigate-title {
         margin-bottom: 15px;
+        color: #000;
     }
     .home__author {
         position: absolute;

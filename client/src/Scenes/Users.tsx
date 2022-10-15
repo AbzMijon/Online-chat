@@ -5,25 +5,29 @@ import { fetchUsers } from "../api/users";
 import defautAvatar from '../assets/img/defaultAvatar.jpg';
 import { userlvlColor } from "../helpers/userlvlColor";
 import Spinner from '../Components/Spinner';
+import { GiQueenCrown } from 'react-icons/gi';
+import { filterUsers } from "../helpers/filterUsers";
 
 const StyledUsers = styled.div `
     overflow: auto;
     padding: 40px 30px;
+    background-color: #1c0707;
     .users__title {
         text-align: center;
         font-size: 45px;
         font-weight: bold;
-        color: #000;
+        color: #fff;
         margin-bottom: 25px;
     }
     .users__sort {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 45px;
+        margin-bottom: 105px;
     }
     .users__sort-title {
         margin-right: 15px;
+        color: #fff;
     }
     .users__list {
         display: grid;
@@ -32,7 +36,8 @@ const StyledUsers = styled.div `
         gap: 30px;
         justify-items: center;
     }
-    .users__user {
+    .users__user, .users__user-top {
+        position: relative;
         width: 200px;
         height: 250px;
         padding: 8px 25px;
@@ -52,6 +57,22 @@ const StyledUsers = styled.div `
         font-weight: bold;
         font-size: 17px;
     }
+    .users__img {
+        border-radius: 10px;
+    }
+    .users__crone {
+        font-size: 75px;
+        color: #ffd400;
+        position: absolute;
+        top: -74px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 2;
+    }
+    .users__user-top {
+        border-radius: 0;
+        box-shadow: 0 0 50px #ffd400;
+    }
 `
 
 function Users():JSX.Element {
@@ -60,29 +81,24 @@ function Users():JSX.Element {
     const [sortValue, setSortValue] = useState('0');
     const [filteredUsers, setFilteredUsers] = useState([]);
 
+    type User = {
+        email: string,
+        id: number | string,
+        level: number | string,
+        name: string,
+        password: string,
+    }
+
     useEffect(() => {
         fetchUsers().then((response) => {
             setUsers(response.data);
         })
     }, []);
 
-    const filterUsers = (usersToFilter, sortingValue) => {
-
-        switch(sortingValue) {
-            case '0':
-                return usersToFilter.sort((prev, next) => next.level - prev.level);
-            case '1':
-                return usersToFilter.sort((prev, next) => {
-                    if ( prev.name < next.name ) return -1;
-                    if ( prev.name < next.name ) return 1;
-                });
-            case '2':
-                return usersToFilter.sort((prev, next) => next.id - prev.id)
-            default:
-                return usersToFilter.sort((prev, next) => next.level - prev.level);
-        }
-    }
-    
+    const bestLevelUsers = filterUsers([...users], sortValue).splice(0, 3);
+    for (let i = 0; i <= bestLevelUsers.length; i++) {
+        
+    }    
     useEffect(() => {
         setFilteredUsers(filterUsers([...users], sortValue));
     }, [sortValue, users]);
@@ -103,10 +119,12 @@ function Users():JSX.Element {
                 </header>
                 <main className="main">
                     <ul className="users__list">
-                        {filteredUsers.map((user:object) => {
+                        {filteredUsers.map((user:User, i) => {                            
                             return (
-                                <li key={user.id} className="users__user" style={{border: `12px solid ${userlvlColor(+user.level)}`, color: `${userlvlColor(+user.level)}`}}>
-                                    {console.log(user.level)}
+                                <li key={user.id} className={i <= 2 && sortValue === '0' ? 'users__user-top' : "users__user"} style={{border: `12px solid ${userlvlColor(+user.level)}`, color: `${userlvlColor(+user.level)}`}}>
+                                    {i <= 2 && sortValue === '0' && 
+                                        <GiQueenCrown className="users__crone"/>
+                                    }
                                     <h5 className="users__name">{user.name}</h5>
                                     <img className="users__img" src={defautAvatar} alt="" />
                                     <span className="users__lvl">{user.level}</span>

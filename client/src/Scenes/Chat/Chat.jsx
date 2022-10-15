@@ -11,6 +11,8 @@ import axios from 'axios';
 import  { BsSearch } from 'react-icons/bs';
 import { StyledChat } from "./StyledChat";
 import { ThreeDots } from "react-loader-spinner";
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constans/routes';
 
 function Chat() {
 
@@ -23,6 +25,8 @@ function Chat() {
     const [handleStiker, setHandleStiker] = useState(false);
     const [users, setUsers] = useState(0);
     const [amountUsers, setAmountUsers] = useState(null);
+    const [searchValue, setSearchValue] = useState('');
+    const navigate = useNavigate();
 
     function connect() {
         socket.current = new WebSocket('ws://localhost:5000');
@@ -84,8 +88,16 @@ function Chat() {
     }
 
     const logicUserColor = {
-        color: `${nameColor}`
+        color: `${nameColor}`   
     }
+
+    const filterMessages = (messsagesToFilter) => messsagesToFilter.filter(mess => {
+        let isPassed = true;
+        if(mess.event === 'message' && searchValue && !mess.message.toLowerCase().includes(searchValue.toLowerCase())) {
+            isPassed = false;
+        }
+        return isPassed;
+    })
 
     if(!connected) {
         return <Spinner/>
@@ -97,7 +109,7 @@ function Chat() {
                 <header className="header">
                     <h4 className="chat__maxlvl"><AiFillCrown className="crown"/> 1000 lvl+: 0</h4>
                     <h2 className="chat__name">Единственный Всемирный чат</h2>
-                    <h5 className="chat__users">Участников: {!amountUsers ?
+                    <h5 className="chat__users" onClick={() => navigate(ROUTES.users)}>Участников: {!amountUsers ?
                         <ThreeDots
                             height="20" 
                             width="20" 
@@ -110,14 +122,14 @@ function Chat() {
                     : amountUsers}
                     </h5>
                     <div className="chat__search">
-                        <input type="text" className="chat__search-input" placeholder="Поиск.." />
+                        <input type="text" className="chat__search-input" placeholder="Поиск.." value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
                         <BsSearch className="chat__search-icon"/>
                     </div>
                 </header>
                 <div className="container">
                     <main className="main">
                         <div className="messages">
-                            {messages.map(message =>
+                            {filterMessages(messages).map(message =>
                                 <div key={message.id} className={(message.userName !== userName) && (message.event !== 'connection') ? `message-another` : `message-me`}>
                                     {message.event === 'connection'
                                         ? <div className="message__connection">

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 import { Form, Formik } from 'formik';
 import LoginFormikInput from "../Components/FormikInputs/LoginFormikInput";
@@ -8,6 +8,7 @@ import { PATH } from '../constans/routes';
 import { randomInteger } from "../helpers/randomInteger";
 import { userColor } from "../constans/userColors";
 import axios from "axios";
+import { fetchUsers } from "../api/users";
 
 const StyledLoginPage = styled.div `
     .login {
@@ -101,14 +102,12 @@ function LoginPage():JSX.Element {
         name: string,
         email: string,
         password: string,
-        id: number | string,
         color: string,
     }
     const initialFormValues:initialFormvaluesTypes = {
         name: '',
         email: '',
         password: '',
-        id: Math.round(Math.random() * 1000),
         color: '',
     }
 
@@ -121,7 +120,6 @@ function LoginPage():JSX.Element {
         name: string,
         email: string,
         password: string,
-        id: number | string,
         color: string,
     }
 
@@ -180,7 +178,6 @@ function LoginPage():JSX.Element {
                                         name: dontHaveAcc ? formvalues.name : findUser.name, 
                                         email: formvalues.email, 
                                         password: formvalues.password, 
-                                        id: dontHaveAcc ? formvalues.id : findUser.id,
                                         color: randColor(),
                                     }})
                                     navigate(PATH.homePage);
