@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { isServerError } from "../store/selectors/serverErrorSelectors";
 import { serverErrorMessage } from "../store/selectors/serverErrorSelectors";
 import serverError from '../assets/img/serverError.png';
 import styled from 'styled-components';
@@ -22,22 +21,15 @@ const StyledGlobalServerError = styled.div `
     }
 `
 
-function GlobalServerError(props: { children: any; }):JSX.Element {
+function GlobalServerError():JSX.Element {
     const message = useSelector(serverErrorMessage);
-    const isError = useSelector(isServerError);
     return (
         <React.Fragment>
-            {isError 
-                ? 
-                    <StyledGlobalServerError className='response-error'>
-                        <h2 className='response-error__title'>{message}</h2>
-                        <img src={serverError} alt='' />
-                    </StyledGlobalServerError>
-                :
-                    props.children
-            }
+            <StyledGlobalServerError className='response-error'>
+                <h2 className='response-error__title'>{message}</h2>
+                <img src={serverError} alt='' />
+            </StyledGlobalServerError>
         </React.Fragment>
-            
     )
 }
 

@@ -12,9 +12,7 @@ function App() {
         <Provider store={store}>
             <PersistGate persistor={persistor} loading={<Spinner/>}>
                 <BrowserRouter>
-                    <GlobalServerError>
-                        <RootRoute/>
-                    </GlobalServerError>
+                    <RootRoute/>
                 </BrowserRouter>
             </PersistGate>
         </Provider>

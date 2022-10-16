@@ -84,6 +84,22 @@
       "name": "TheEvil",
       "level": 90,
       "id": 12
+    },
+    {
+      "email": "popka@gmail.com",
+      "password": "$2a$10$ecxcIM9xAYow22GTKgvqceG1tSj.koR4s6BrPCRseTPnzM.DiW35y",
+      "name": "popka",
+      "level": 0,
+      "messageAmount": 0,
+      "id": 13
+    },
+    {
+      "email": "testing@gmail.com",
+      "password": "$2a$10$vHnrBLP11FiIoMiYH910/.svRXZRzwf9P1X677o8a5Srqz714NFX6",
+      "name": "testingIds",
+      "id": 783,
+      "level": 0,
+      "messageAmount": 4
     }
   ]
 }

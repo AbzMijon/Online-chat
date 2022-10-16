@@ -2,15 +2,26 @@ import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 import { Form, Formik } from 'formik';
 import LoginFormikInput from "../Components/FormikInputs/LoginFormikInput";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../constans/routes'; 
 import { randomInteger } from "../helpers/randomInteger";
 import { userColor } from "../constans/userColors";
 import axios from "axios";
 import { fetchUsers } from "../api/users";
+import GlobalServerError from "../HOC/GlobalServerError";
+import { isServerError } from "../store/selectors/serverErrorSelectors";
 
 const StyledLoginPage = styled.div `
+    background-color: #1A202C;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
     .login {
         width: 560px;
         height: 650px;
@@ -92,7 +103,7 @@ function LoginPage():JSX.Element {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loginError, setLoginError] = useState('');
-
+    const isError = useSelector(isServerError);
     const randColor = () => {
         const num = randomInteger(0, userColor.length - 2);
         return userColor[num];
@@ -102,13 +113,17 @@ function LoginPage():JSX.Element {
         name: string,
         email: string,
         password: string,
+        id: number | string,
         color: string,
+        messageAmount: number | string,
     }
     const initialFormValues:initialFormvaluesTypes = {
         name: '',
         email: '',
         password: '',
+        id: Math.round(Math.random() * 1000),
         color: '',
+        messageAmount: 0,
     }
 
     type formValueTypes = {
@@ -120,7 +135,9 @@ function LoginPage():JSX.Element {
         name: string,
         email: string,
         password: string,
+        id: number | string,
         color: string,
+        messageAmount: number | string,
     }
 
     const validateForm = (formValues:validateFormTypes):formValueTypes | void => {
@@ -156,6 +173,9 @@ function LoginPage():JSX.Element {
 
         if(!isPassed) return errorsObject;
     }
+    if(isError) {
+        return <GlobalServerError/>
+    }
 
     return (
         <StyledLoginPage>
@@ -168,7 +188,9 @@ function LoginPage():JSX.Element {
                             name: formvalues.name,
                             email: formvalues.email,
                             password: formvalues.password,
+                            id: formvalues.id,
                             level: 0,
+                            messageAmount: 0,
                         }).then(() => {
                             axios.get(`http://localhost:8000/users`).then(response => {
                                 const findUser = response.data.find((user: { email: string; }) => user.email === formvalues.email);
@@ -177,7 +199,7 @@ function LoginPage():JSX.Element {
                                     {
                                         name: dontHaveAcc ? formvalues.name : findUser.name, 
                                         email: formvalues.email, 
-                                        password: formvalues.password, 
+                                        id: formvalues.id,
                                         color: randColor(),
                                     }})
                                     navigate(PATH.homePage);

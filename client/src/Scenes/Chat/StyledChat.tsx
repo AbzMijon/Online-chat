@@ -44,6 +44,7 @@ export const StyledChat = styled.div `
         background-color: #ffffff;
         position: relative;
         flex-wrap: wrap;
+        color: #1a1a1a;
     }
     .mess-me {
         border-radius: 12px 12px 12px 0;

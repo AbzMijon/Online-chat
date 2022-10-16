@@ -1,7 +1,7 @@
 interface State {
     isLoggedIn: boolean,
     name: string,
-    password: string,
+    id: number | string,
     color: string,
     email: string,
 }
@@ -9,7 +9,7 @@ export const userReducer = (state:State =
     {
         isLoggedIn: false, 
         name: '', 
-        password: '', 
+        id: 0, 
         color: '',
         email: '',
     }, 
@@ -19,7 +19,7 @@ export const userReducer = (state:State =
                 payload: 
                     { 
                         name: string; 
-                        password: string; 
+                        id: string | number,
                         color: string,
                         email: string,
                     } 
@@ -30,7 +30,7 @@ export const userReducer = (state:State =
                 ...state,
                 isLoggedIn: true,
                 name: action.payload.name,
-                password: action.payload.password,
+                id: action.payload.id,
                 color: action.payload.color,
                 email: action.payload.email,
             };
@@ -39,7 +39,7 @@ export const userReducer = (state:State =
                 ...state,
                 isLoggedIn: false,
                 name: '',
-                password: '',
+                id: 0,
                 color: '',
                 email: '',
             };

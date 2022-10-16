@@ -7,6 +7,9 @@ import { userlvlColor } from "../helpers/userlvlColor";
 import Spinner from '../Components/Spinner';
 import { GiQueenCrown } from 'react-icons/gi';
 import { filterUsers } from "../helpers/filterUsers";
+import { isServerError } from "../store/selectors/serverErrorSelectors";
+import { useSelector } from "react-redux";
+import GlobalServerError from "../HOC/GlobalServerError";
 
 const StyledUsers = styled.div `
     overflow: auto;
@@ -80,6 +83,7 @@ function Users():JSX.Element {
     const [users, setUsers] = useState([]);
     const [sortValue, setSortValue] = useState('0');
     const [filteredUsers, setFilteredUsers] = useState([]);
+    const isError = useSelector(isServerError);
 
     type User = {
         email: string,
@@ -103,6 +107,9 @@ function Users():JSX.Element {
         setFilteredUsers(filterUsers([...users], sortValue));
     }, [sortValue, users]);
 
+    if(isError) {
+        return <GlobalServerError/>
+    }
     if(!users.length) {
         return <Spinner/>
     }

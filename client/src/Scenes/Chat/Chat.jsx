@@ -2,17 +2,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from 'react-redux';
 import { loggedUserName } from '../../store/selectors/userSelectors'; 
 import defautAvatar from '../../assets/img/defaultAvatar.jpg';
-import { AiOutlineSend, AiFillCrown } from 'react-icons/ai';
+import { AiOutlineSend } from 'react-icons/ai';
 import Spinner from "../../Components/Spinner";
 import EmojiPicker from 'emoji-picker-react';
 import { BiSmile } from 'react-icons/bi';
 import { userColor } from "../../store/selectors/userSelectors";
-import axios from 'axios';
-import  { BsSearch } from 'react-icons/bs';
 import { StyledChat } from "./StyledChat";
-import { ThreeDots } from "react-loader-spinner";
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../constans/routes';
+import GlobalServerError from "../../HOC/GlobalServerError";
+import { isServerError } from "../../store/selectors/serverErrorSelectors";
+import { filterMessages } from "../../helpers/filterMessages";
+import ChatHeader from "../../Components/ChatHeader";
 
 function Chat() {
 
@@ -23,10 +22,9 @@ function Chat() {
     const userName = useSelector(loggedUserName);
     const nameColor = useSelector(userColor);
     const [handleStiker, setHandleStiker] = useState(false);
-    const [users, setUsers] = useState(0);
-    const [amountUsers, setAmountUsers] = useState(null);
     const [searchValue, setSearchValue] = useState('');
-    const navigate = useNavigate();
+    const isError = useSelector(isServerError);
+    const [messagesCount, setMessagesCount] = useState(0);
 
     function connect() {
         socket.current = new WebSocket('ws://localhost:5000');
@@ -52,14 +50,10 @@ function Chat() {
             console.log('Socket ошибка');
         }
     }   
+
     useEffect(() => {
         connect();
     }, []);
-    useEffect(() => {
-        axios.get('http://localhost:8000/users').then(response => {
-            setAmountUsers(response.data.length);
-        })
-    }, [users]);
     
 /*     useEffect(() => {
         const messagesText = messages.filter(message => message.message);
@@ -85,58 +79,31 @@ function Chat() {
             setMessageValue('');
         }
         setHandleStiker(false);
+        setMessagesCount(messagesCount + 1);
     }
-
-    const logicUserColor = {
-        color: `${nameColor}`   
-    }
-
-    const filterMessages = (messsagesToFilter) => messsagesToFilter.filter(mess => {
-        let isPassed = true;
-        if(mess.event === 'message' && searchValue && !mess.message.toLowerCase().includes(searchValue.toLowerCase())) {
-            isPassed = false;
-        }
-        return isPassed;
-    })
 
     if(!connected) {
         return <Spinner/>
+    }
+    if (isError) {
+        return <GlobalServerError/>
     }
 
     return (
         <StyledChat>
             <div className="form__wrapper">
-                <header className="header">
-                    <h4 className="chat__maxlvl"><AiFillCrown className="crown"/> 1000 lvl+: 0</h4>
-                    <h2 className="chat__name">Единственный Всемирный чат</h2>
-                    <h5 className="chat__users" onClick={() => navigate(ROUTES.users)}>Участников: {!amountUsers ?
-                        <ThreeDots
-                            height="20" 
-                            width="20" 
-                            radius="9"
-                            color="#fff" 
-                            ariaLabel="three-dots-loading"
-                            wrapperStyle={{}}
-                            visible={true}
-                            />
-                    : amountUsers}
-                    </h5>
-                    <div className="chat__search">
-                        <input type="text" className="chat__search-input" placeholder="Поиск.." value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-                        <BsSearch className="chat__search-icon"/>
-                    </div>
-                </header>
+                <ChatHeader searchValue={searchValue} setSearchValue={setSearchValue}/>
                 <div className="container">
                     <main className="main">
                         <div className="messages">
-                            {filterMessages(messages).map(message =>
+                            {filterMessages(messages, searchValue).map(message =>
                                 <div key={message.id} className={(message.userName !== userName) && (message.event !== 'connection') ? `message-another` : `message-me`}>
                                     {message.event === 'connection'
                                         ? <div className="message__connection">
                                             Пользователь <img src={defautAvatar} alt="" className="message__avatar"/> {userName} подключился
                                         </div>
                                         : <div className={message.userName !== userName ? 'mess-another' : 'mess-me'}>
-                                            <span style={logicUserColor} className="username">{userName}</span> {message.message}
+                                            <span style={{ color: `${nameColor}`}} className="username">{userName}</span> {message.message}
                                             <img src={defautAvatar} alt="" className={message.userName !== userName ? "message__avatar-mess--another" : "message__avatar-mess--me"}/>
                                         </div>
                                     }

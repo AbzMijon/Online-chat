@@ -2,6 +2,9 @@ import React from "react";
 import { useNavigate } from 'react-router-dom'; 
 import { PATH } from '../constans/routes';
 import styled from 'styled-components';
+import { isServerError } from "../store/selectors/serverErrorSelectors";
+import { useSelector } from "react-redux";
+import GlobalServerError from "../HOC/GlobalServerError";
 
 const StyledHome = styled.div `
     padding: 60px;
@@ -81,6 +84,11 @@ const StyledHome = styled.div `
 function Home():JSX.Element {
 
     const navigate = useNavigate();
+    const isError = useSelector(isServerError);
+
+    if(isError) {
+        return <GlobalServerError/>
+    }
 
     return (
         <StyledHome>
