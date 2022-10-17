@@ -5,6 +5,72 @@ import { ThreeDots } from "react-loader-spinner";
 import { ROUTES } from '../constans/routes';
 import { fetchUsers } from '../api/users';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+
+const StyledChatHeader = styled.div `
+        .chat__name {
+        font-size: 19px;
+        text-align: center;
+        color: #c4c4c4;
+    }
+    .header {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #1a1a1a;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border-bottom: 1px solid #c4c4c4;
+        padding: 7px 0;
+        z-index: 3;
+    }
+    .chat__users {
+        color: #d4d4d4;
+        display: flex;
+        cursor: pointer;
+    }
+    .chat__search {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .chat__search-icon {
+        font-size: 25px;
+        color: #e9e9e9;
+        cursor: pointer;
+    }
+    .chat__search-input {
+        border: none;
+        outline: none;
+        background-color: #212121;
+        font-size: 22px;
+        color: #949494;
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-right: 15px;
+    }
+    .chat__maxlvl {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        left: 50px;
+        color: #e4e4e4;
+        font-size: 17px;
+        display: flex;
+        align-items: center;
+    }
+    .crown {
+        color: #b1b112;
+        margin-right: 5px;
+    }
+`
 
 function ChatHeader({ searchValue, setSearchValue }):JSX.Element {
     const [users, setUsers] = useState(0);
@@ -22,37 +88,39 @@ function ChatHeader({ searchValue, setSearchValue }):JSX.Element {
     }, [users]);
 
     return (
-        <header className="header">
-            <h4 className="chat__maxlvl"><AiFillCrown className="crown"/> 1000 lvl+: {theBestLvlUsers === null ?
-                <ThreeDots
-                    height="20" 
-                    width="20" 
-                    radius="9"
-                    color="#fff" 
-                    ariaLabel="three-dots-loading"
-                    wrapperStyle={{}}
-                    visible={true}
-                    />
-                        : theBestLvlUsers
-                    }</h4>
-            <h2 className="chat__name">Единственный Всемирный чат</h2>
-            <h5 className="chat__users" onClick={() => navigate(ROUTES.users)}>Участников: {amountUsers === null ?
-                <ThreeDots
-                    height="20" 
-                    width="20" 
-                    radius="9"
-                    color="#fff" 
-                    ariaLabel="three-dots-loading"
-                    wrapperStyle={{}}
-                    visible={true}
-                    />
-                    : amountUsers}
-                    </h5>
-            <div className="chat__search">
-                <input type="text" className="chat__search-input" placeholder="Поиск.." value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
-                <BsSearch className="chat__search-icon"/>
-            </div>
-        </header>
+        <StyledChatHeader>
+            <header className="header">
+                <h4 className="chat__maxlvl"><AiFillCrown className="crown"/> 1000 lvl+: {theBestLvlUsers === null ?
+                    <ThreeDots
+                        height="20" 
+                        width="20" 
+                        radius="9"
+                        color="#fff" 
+                        ariaLabel="three-dots-loading"
+                        wrapperStyle={{}}
+                        visible={true}
+                        />
+                            : theBestLvlUsers
+                        }</h4>
+                <h2 className="chat__name">Единственный Всемирный чат</h2>
+                <h5 className="chat__users" onClick={() => navigate(ROUTES.users)}>Участников: {amountUsers === null ?
+                    <ThreeDots
+                        height="20" 
+                        width="20" 
+                        radius="9"
+                        color="#fff" 
+                        ariaLabel="three-dots-loading"
+                        wrapperStyle={{}}
+                        visible={true}
+                        />
+                        : amountUsers}
+                        </h5>
+                <div className="chat__search">
+                    <input type="text" className="chat__search-input" placeholder="Поиск.." value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
+                    <BsSearch className="chat__search-icon"/>
+                </div>
+            </header>
+        </StyledChatHeader>
     )
 }
 

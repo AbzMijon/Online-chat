@@ -1,26 +1,101 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from 'react-redux';
 import { loggedUserName } from '../../store/selectors/userSelectors'; 
-import defautAvatar from '../../assets/img/defaultAvatar.jpg';
 import { AiOutlineSend } from 'react-icons/ai';
 import Spinner from "../../Components/Spinner";
-import EmojiPicker from 'emoji-picker-react';
 import { BiSmile } from 'react-icons/bi';
-import { userColor } from "../../store/selectors/userSelectors";
-import { StyledChat } from "./StyledChat";
 import GlobalServerError from "../../HOC/GlobalServerError";
 import { isServerError } from "../../store/selectors/serverErrorSelectors";
-import { filterMessages } from "../../helpers/filterMessages";
 import ChatHeader from "../../Components/ChatHeader";
+import Messages from "../../Components/Messages";
+import EmojiPopup from "../../Components/EmojiPopup";
+import styled from 'styled-components';
+import darkBackground from '../../assets/img/darkBackground.jpg';
 
-function Chat() {
+const StyledChat = styled.div `
+    .form__wrapper {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: url(${darkBackground}) center;
+        position: relative;
+    }
+    .container {
+        width: 650px;
+        padding: 10px 15px;
+        margin: 0 auto;
+        position: relative;
+        height: 100%;
+    }
+    .form {
+        width: 100%;
+        padding: 20px 25px;
+        border-radius: 10px;
+        background-color: #212121;
+        border: 1px solid #363636;
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .form__btn {
+        border: none;
+        outline: none;
+        background-color: transparent;
+        font-size: 20px;
+        color: #a3a3a3;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .form__btn:hover {
+        color: #fff;
+    }
+    .form__btn-smile {
+        font-size: 25px;
+    }
+    .form__input {
+        width: 85%;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        font-size: 15px;
+        color: #fff;
+    }
+    .form__btn-in {
+        padding: 10px 15px;
+        border: none;
+        outline: none;
+        margin-right: 10px;
+        background-color: #a3a3a3;
+        font-weight: bold;
+        font-size: 25px;
+        border-radius: 5px;
+        color: #fff;
+        transition: 0.2s ease-in;
+        cursor: pointer;
+    }
+    .form__btn-in:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 6px #949494;
+    }
+    .main {
+        margin-top: 60px;
+    }
+`
+
+function Chat():JSX.Element {
 
     const [messages, setMessages] = useState([]);
     const [messageValue, setMessageValue] = useState('');
     const [connected, setConnected] = useState(false);
     const socket = useRef();
     const userName = useSelector(loggedUserName);
-    const nameColor = useSelector(userColor);
     const [handleStiker, setHandleStiker] = useState(false);
     const [searchValue, setSearchValue] = useState('');
     const isError = useSelector(isServerError);
@@ -39,7 +114,7 @@ function Chat() {
             }
             socket.current.send(JSON.stringify(message));
         }
-        socket.current.onmessage = (event) => {
+        socket.current.onmessage = (event: { data: string; }) => {
             const message = JSON.parse(event.data);
             setMessages((prev) => [...prev, message]);
         }
@@ -95,21 +170,11 @@ function Chat() {
                 <ChatHeader searchValue={searchValue} setSearchValue={setSearchValue}/>
                 <div className="container">
                     <main className="main">
-                        <div className="messages">
-                            {filterMessages(messages, searchValue).map(message =>
-                                <div key={message.id} className={(message.userName !== userName) && (message.event !== 'connection') ? `message-another` : `message-me`}>
-                                    {message.event === 'connection'
-                                        ? <div className="message__connection">
-                                            Пользователь <img src={defautAvatar} alt="" className="message__avatar"/> {userName} подключился
-                                        </div>
-                                        : <div className={message.userName !== userName ? 'mess-another' : 'mess-me'}>
-                                            <span style={{ color: `${nameColor}`}} className="username">{userName}</span> {message.message}
-                                            <img src={defautAvatar} alt="" className={message.userName !== userName ? "message__avatar-mess--another" : "message__avatar-mess--me"}/>
-                                        </div>
-                                    }
-                                </div>
-                            )}
-                        </div>
+                        <Messages 
+                            messages={messages} 
+                            searchValue={searchValue} 
+                            userName={userName}
+                        />
                         <div className="form">
                             <button className="form__btn form__btn-smile" type="button" onClick={() => setHandleStiker(!handleStiker)}><BiSmile/></button>
                             <input value={messageValue} onKeyDown={(keyPress) => {
@@ -126,14 +191,10 @@ function Chat() {
                             type="text"/>
                             <button type="button" className="form__btn" onClick={sendMessage}><AiOutlineSend/></button>
                         </div>
-                        <div className="emoji">
-                            {handleStiker && <EmojiPicker
-                                theme='dark'
-                                onEmojiClick={(emojiObj) => setMessageValue((prevMessage) => prevMessage + emojiObj.emoji)}
-                                className='message__emojipicker'
-                                />
-                            }
-                        </div>
+                        <EmojiPopup 
+                            handleStiker={handleStiker} 
+                            setMessageValue={setMessageValue} 
+                        />
                     </main>
                 </div>
             </div>

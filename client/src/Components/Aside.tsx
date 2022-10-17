@@ -10,7 +10,7 @@ import { loggedUserName } from "../store/selectors/userSelectors";
 import { useSelector, useDispatch } from "react-redux";
 import defautAvatar from '../assets/img/defaultAvatar.jpg';
 import { useNavigate } from "react-router-dom";
-import { PATH } from "../constans/routes";
+import { PATH, ROUTES } from "../constans/routes";
 import { fetchUsers } from "../api/users";
 import { userlvlColor } from "../helpers/userlvlColor";
 import { userEmail } from "../store/selectors/userSelectors";
@@ -184,7 +184,7 @@ function Aside():JSX.Element {
                     </div>
                     <div className={handleName ? "aside__hidden-block--handle" : "aside__hidden-block"}>
                         <ul className="aside__hidden-list">
-                            <li className="aside__hidden-item">support</li>
+                            <li className="aside__hidden-item" onClick={() => navigate(ROUTES.support)}>support</li>
                             <li className="aside__hidden-item" onClick={logout}>log out</li>
                         </ul>
                     </div>
