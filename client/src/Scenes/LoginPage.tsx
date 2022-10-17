@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from 'styled-components';
 import { Form, Formik } from 'formik';
 import LoginFormikInput from "../Components/FormikInputs/LoginFormikInput";
@@ -192,7 +192,7 @@ function LoginPage():JSX.Element {
                             level: 0,
                             messageAmount: 0,
                         }).then(() => {
-                            axios.get(`http://localhost:8000/users`).then(response => {
+                            fetchUsers().then(response => {
                                 const findUser = response.data.find((user: { email: string; }) => user.email === formvalues.email);
                                 dispatch(
                                     {type: 'userLogIn', payload: 
