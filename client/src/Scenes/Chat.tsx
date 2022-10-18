@@ -1,16 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from 'react-redux';
-import { loggedUserName } from '../../store/selectors/userSelectors'; 
+import { loggedUserName } from '../store/selectors/userSelectors'; 
 import { AiOutlineSend } from 'react-icons/ai';
-import Spinner from "../../Components/Spinner";
+import Spinner from "../Components/Spinner";
 import { BiSmile } from 'react-icons/bi';
-import GlobalServerError from "../../HOC/GlobalServerError";
-import { isServerError } from "../../store/selectors/serverErrorSelectors";
-import ChatHeader from "../../Components/ChatHeader";
-import Messages from "../../Components/Messages";
-import EmojiPopup from "../../Components/EmojiPopup";
+import GlobalServerError from "../HOC/GlobalServerError";
+import { isServerError } from "../store/selectors/serverErrorSelectors";
+import ChatHeader from "../Components/ChatHeader";
+import Messages from "../Components/Messages";
+import EmojiPopup from "../Components/EmojiPopup";
 import styled from 'styled-components';
-import darkBackground from '../../assets/img/darkBackground.jpg';
+import darkBackground from '../assets/img/darkBackground.jpg';
 
 const StyledChat = styled.div `
     .form__wrapper {

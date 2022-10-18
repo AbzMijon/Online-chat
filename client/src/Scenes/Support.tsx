@@ -1,14 +1,23 @@
 import { Formik, Form } from "formik";
 import React from "react";
 import styled from 'styled-components';
-import SupportFormikTextArea from "../Components/FormikInputs/SupportFormikTextArea";
+import SupportFormikTextArea from "../Components/FormikInputs/support/SupportFormikTextArea";
+import SupportUiImg from '../assets/img/supportUiImg.png';
+import SupportFormikSelect from "../Components/FormikInputs/support/SupportFormikSelect";
+import { fetchSupportMessage } from "../api/support";
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from "../constans/routes";
+import { userEmail } from "../store/selectors/userSelectors";
+import { useSelector } from "react-redux";
 
 const StyledSupport = styled.div`
     padding: 20px 25px;
+    background-color: #161b22;
     .support__title {
-        color: #000;
+        color: #fff;
         font-size: 35px;
         font-weight: bold;
+        margin-bottom: 35px;
     }
 
     .support__avatar {
@@ -16,12 +25,33 @@ const StyledSupport = styled.div`
         top: 15px;
         right: 15px;
     }
+    .main {
+        max-width: 65%;
+    }
+    .support__btn {
+        padding: 10px 15px;
+        background-color: #0d1117;
+        border-radius: 5px;
+        font-size: 15px;
+        font-weight: bold;
+        color: #fff;
+        cursor: pointer;
+        transition: 0.2s all;
+    }
+    .support__btn:hover {
+        transform: scale(0.9);
+    }
 `
 
 function Support():JSX.Element {
+
+    const navigate = useNavigate();
+    const userMail = useSelector(userEmail);
+
     type initialFormValuesTypes = {
         groupProblem: number | string,
         problem: string,
+        email: string,
     }
     type errorsObjTypes = {
         groupProblem?: number | string,
@@ -30,6 +60,7 @@ function Support():JSX.Element {
     const initialFormValues:initialFormValuesTypes = {
         groupProblem: 0,
         problem: '',
+        email: userMail,
     }
     const validateForm = (formValues:initialFormValuesTypes) => {
         let errorsObj:errorsObjTypes = {};
@@ -39,7 +70,9 @@ function Support():JSX.Element {
             errorsObj.problem = 'Для отправки сообщения необходимо заполнить форму..';
             isPassed = false;
         }
-        if(formValues.groupProblem === 0) {
+        console.log(formValues.groupProblem);
+        
+        if(+formValues.groupProblem === 0 || formValues.groupProblem === undefined) {
             errorsObj.groupProblem = 'Пожалуйста, выберите одну из групп проблем..';
             isPassed = false;
         }
@@ -48,15 +81,21 @@ function Support():JSX.Element {
     }
     return (
         <StyledSupport>
-            <h2 className="support__title">Подробно опишите вашу проблему</h2>
-            <img className="support__avatar" src="https://skops.ru/wp-content/uploads/2019/01/tehnicheskoe-obsluzhivanie.png" alt="" />
-            <Formik initialValues={initialFormValues} validate={validateForm} onSubmit={() => {
-                console.log(1);
-            }}>
-                <Form>
-                    <SupportFormikTextArea name='problem' required placeholder='Кратко опишите вашу проблему..'/>
-                </Form>
-            </Formik>
+            <img className="support__avatar" src={SupportUiImg} alt="" />
+            <main className="main">
+                <h2 className="support__title">Добро пожаловать на страницу поддержки!</h2>
+                <Formik initialValues={initialFormValues} validate={validateForm} onSubmit={(formValues) => {
+                    fetchSupportMessage(formValues.groupProblem, formValues.problem, formValues.email);
+                    navigate(ROUTES.supportSubmit);
+                    console.log('message gives!');
+                }}>
+                    <Form>
+                        <SupportFormikSelect name='groupProblem' required placeholder='Выберите группу проблем'/>
+                        <SupportFormikTextArea name='problem' required placeholder='Подробно опишите вашу проблему..'/>
+                        <button className="support__btn" type="submit">Отправить письмо!</button>
+                    </Form>
+                </Formik>
+            </main>
         </StyledSupport>
     )
 };;

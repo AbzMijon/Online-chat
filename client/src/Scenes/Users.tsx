@@ -14,7 +14,7 @@ import GlobalServerError from "../HOC/GlobalServerError";
 const StyledUsers = styled.div `
     overflow: auto;
     padding: 40px 30px;
-    background-color: #1c0707;
+    background-color: #161b22;
     .users__title {
         text-align: center;
         font-size: 45px;

@@ -1,8 +1,9 @@
 import React from "react";
 import { useField } from "formik";
 import styled from 'styled-components';
+import { supportForimkSelect } from "../../../constans/supportForimkSelect";
 
-const StyledSupportTextArea = styled.div `
+const StyledSupportSelect = styled.div `
     .field {
         position: relative;
         margin-bottom: 20px;
@@ -31,35 +32,40 @@ const StyledSupportTextArea = styled.div `
         font-weight: 400;
         font-size: 14px;
         line-height: 16px;
-        color: #2D3748;
+        background-color: #0d1117;
+        color: #fff;
         border-radius: 5px;
         padding: 18px 22px;
         width: 100%;
-    }
-    .support__field {
-        border: 1px solid #E8E8E8;
+        border: 1px solid #1f1f1f;
+        max-width: 300px;
+        padding: 10px 15px;
     }
     .support__field--error {
         border: 1px solid #811d1d;
     }
 `
 
-function SupportFormikTextArea(props) {
+function SupportFormikSelect(props) {
     
 	const [field, meta, helpers] = useField(props.name);
-    console.log(meta.error);
     
 	return (
-        <StyledSupportTextArea>
+        <StyledSupportSelect>
             <div className='field'>
-                <h5 className='support__title-field'>{props.name}</h5>
-                <textarea className={meta.touched && meta.error ? 'support__field--error' : 'support__field'} {...props} {...field} />
+                <select className={meta.touched && meta.error ? 'support__field--error' : 'support__field'} {...props} {...field}>
+                    {supportForimkSelect.map(field => {
+                        return (
+                            <option key={field.id} value={field.id}>{field.value}</option>
+                        )
+                    })}
+                </select>
                 {meta.touched && meta.error && (
                     <p className='field__error'>{meta.error}</p>
                 )}
 		    </div>
-        </StyledSupportTextArea>
+        </StyledSupportSelect>
 	);
 }
 
-export default SupportFormikTextArea;
+export default SupportFormikSelect;

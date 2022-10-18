@@ -18,7 +18,7 @@ const StyledChatHeader = styled.div `
         top: 0;
         left: 0;
         width: 100%;
-        background-color: #1a1a1a;
+        background-color: #0d1117;
         display: flex;
         justify-content: center;
         align-items: center;

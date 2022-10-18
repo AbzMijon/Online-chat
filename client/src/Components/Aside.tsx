@@ -19,7 +19,7 @@ const StyledAside = styled.div `
     .aside {
         position: relative;
         padding: 60px 50px;
-        background-color: #131014;
+        background-color: #0d1117;
         border-right: 1px solid #c7c7c7;
         height: 100%;
     }
@@ -113,7 +113,7 @@ const StyledAside = styled.div `
     .aside__logout {
         position: absolute;
         bottom: 40px;
-        left: 40px;
+        left: 55px;
         display: flex;
         align-items:center;
         color: #5c5c5c;
@@ -210,8 +210,8 @@ function Aside():JSX.Element {
                         <li className={location === PATH.settings 
                             ? 'aside__menu-item--active' 
                             : 'aside__menu-item'} 
-                            onClick={() => navigate(PATH.settings)}>
-                            <FiSettings className='aside__icon aside__settings-icon'/>SETTINGS</li>
+                            onClick={() => navigate(PATH.achives)}>
+                            <FiSettings className='aside__icon aside__settings-icon'/>ACHIVES</li>
                         <li className={location === PATH.support 
                             ? 'aside__menu-item--active' 
                             : 'aside__menu-item'} 

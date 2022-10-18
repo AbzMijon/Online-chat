@@ -3,8 +3,9 @@ export const ROUTES = {
     loginPage: '/login',
     chat: '/chat',
     users: '/users',
-    settings: '/settings',
+    achives: '/achives',
     support: '/support',
+    supportSubmit: '/supportSubmit',
 }
 
 export const PATH = {
@@ -12,6 +13,7 @@ export const PATH = {
     loginPage: '/login',
     chat: '/chat',
     users: '/users',
-    settings: '/settings',
+    achives: '/achives',
     support: '/support',
+    supportSubmit: '/supportSubmit',
 }
