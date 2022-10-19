@@ -6,7 +6,7 @@ import SupportUiImg from '../assets/img/supportUiImg.png';
 import SupportFormikSelect from "../Components/FormikInputs/support/SupportFormikSelect";
 import { fetchSupportMessage } from "../api/support";
 import { useNavigate } from 'react-router-dom';
-import { ROUTES } from "../constans/routes";
+import { PATH } from "../constans/routes";
 import { userEmail } from "../store/selectors/userSelectors";
 import { useSelector } from "react-redux";
 
@@ -27,6 +27,8 @@ const StyledSupport = styled.div`
     }
     .main {
         max-width: 65%;
+        height: 100%;
+        position: relative;
     }
     .support__btn {
         padding: 10px 15px;
@@ -40,6 +42,12 @@ const StyledSupport = styled.div`
     }
     .support__btn:hover {
         transform: scale(0.9);
+    }
+    .support__warning {
+        color: #4b3535;
+        position: absolute;
+        bottom: 30px;
+        left: 0px;
     }
 `
 
@@ -86,7 +94,7 @@ function Support():JSX.Element {
                 <h2 className="support__title">Добро пожаловать на страницу поддержки!</h2>
                 <Formik initialValues={initialFormValues} validate={validateForm} onSubmit={(formValues) => {
                     fetchSupportMessage(formValues.groupProblem, formValues.problem, formValues.email);
-                    navigate(ROUTES.supportSubmit);
+                    navigate(PATH.supportSubmit);
                     console.log('message gives!');
                 }}>
                     <Form>
@@ -95,6 +103,7 @@ function Support():JSX.Element {
                         <button className="support__btn" type="submit">Отправить письмо!</button>
                     </Form>
                 </Formik>
+                <p className="support__warning">Внимание! За оскорбление администраторов, спама в службу поддаржки предусматривается блокировка пользователя на некий период!</p>
             </main>
         </StyledSupport>
     )

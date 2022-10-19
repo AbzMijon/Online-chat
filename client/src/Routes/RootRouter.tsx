@@ -11,6 +11,7 @@ import Chat from '../Scenes/Chat';
 import Users from '../Scenes/Users';
 import Achives from '../Scenes/Achives';
 import Support from '../Scenes/Support'; 
+import SupportSubmit from '../Scenes/SupportSubmit';
 
 function RootRoute() {
 
@@ -40,6 +41,7 @@ function RootRoute() {
             <Route path={ROUTES.support} element={renderedForGuest(<MainLayout/>)}>
                 <Route path={ROUTES.support} element={<Support/>}></Route>
             </Route>
+            <Route path={ROUTES.supportSubmit} element={<SupportSubmit/>}></Route>
             <Route path={ROUTES.loginPage} element={<LoginPage/>}></Route>
             <Route path='*' element={<Navigate to={ROUTES.homePage}/>}></Route>
         </Routes>

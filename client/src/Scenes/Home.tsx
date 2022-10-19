@@ -5,55 +5,16 @@ import styled from 'styled-components';
 import { isServerError } from "../store/selectors/serverErrorSelectors";
 import { useSelector } from "react-redux";
 import GlobalServerError from "../HOC/GlobalServerError";
+import { BsFillPencilFill } from "react-icons/bs";
+import { Formik, Form } from "formik";
+import { loggedUserPassword } from "../store/selectors/userSelectors";
 
 const StyledHome = styled.div `
     padding: 60px;
     margin: 0;
     position: relative;
-    .home__title {
-        color: #000;
-        font-weight: bold;
-        font-size: 50px;
-        letter-spacing: 0.5px;
-        text-align: center;
-        margin-bottom: 40px;
-    }
-    .home__about {
-        margin-bottom: 25px;
-        text-align: center;
-        color: #000;
-    }
-    .home__about-list {
-        margin-bottom: 80px;
-        color: #000;
-    }
-    .home__about-item {
-        margin-bottom: 20px;
-        font-size: 20px;
-    }
-    .form__btn-in {
-        padding: 20px 25px;
-        outline: none;
-        font-size: 25px;
-        border: none;
-        background-color: #000;
-        color: #fff;
-        cursor: pointer;
-        font-weight: bold;
-        border-radius: 5px;
-        transition: 0.1s ease-in-out;
-        border: 1px solid transparent;
-    }
-    .form__btn-in:hover {
-        transform: scale(1.1);
-    }
-    .home__navigate {
-        text-align: center;
-        margin: 75px 0 0 0;
-    }
-    .home__navigate-title {
-        margin-bottom: 15px;
-        color: #000;
+    .home {
+        background-color: #161b22;
     }
     .home__author {
         position: absolute;
@@ -65,26 +26,70 @@ const StyledHome = styled.div `
         position: absolute;
         bottom: 25px;
         left: 25px;
-        padding: 20px 25px;
-        outline: none;
-        font-size: 20px;
-        border: none;
-        background-color: #8a3131;
-        color: #fff;
+        font-size: 15px;
+        color: #8a3131;
         cursor: pointer;
-        font-weight: bold;
-        border-radius: 5px;
         transition: 0.1s ease-in-out;
-    }
-    .home__help:hover {
-        background-color: #a82c2c;
     }
 `
 
 function Home():JSX.Element {
 
+    type initialNameValuesTypes = {
+        newName: string,
+    }
+    type initialPasswordValuesTypes = {
+        oldPassword: string,
+        newPassword: string,
+    }
+    type formValuesTypes = {
+        newName: string,
+        oldPassword: string,
+        newPassword: string,
+    }
+    type errorsObjTypes = {
+        newName?: string,
+        oldPassword?: string,
+        newPassword?: string,
+    }
+    
     const navigate = useNavigate();
     const isError = useSelector(isServerError);
+    const password = useSelector(loggedUserPassword);
+
+    const initialNameValues:initialNameValuesTypes = {
+        newName: '',
+    }
+    const initialPasswordValues:initialPasswordValuesTypes = {
+        oldPassword: '',
+        newPassword: '',
+    }
+
+    const validateForm = ((formValues:formValuesTypes) => {
+        let isPassed = true;
+        let errorsObj:errorsObjTypes = {};
+
+        if(formValues.newName.length === 0) {
+            isPassed = false;
+            errorsObj.newName = 'Обязательное поле для заполнения!'
+        }
+        if(formValues.newName.length > 13) {
+            isPassed = false;
+            errorsObj.newName = 'Слишком длинное имя'
+        }
+        if(formValues.newPassword.length === 0) {
+            isPassed = false;
+            errorsObj.newPassword = 'Обязательное поле для заполнения!'
+        }
+        if(formValues.oldPassword !== password) {
+            isPassed = false;
+            errorsObj.oldPassword = 'Пароль не совпадает со старым!'
+        }
+
+        isPassed = false;
+        if(!isPassed) return errorsObj;
+    })
+
 
     if(isError) {
         return <GlobalServerError/>
@@ -92,23 +97,47 @@ function Home():JSX.Element {
 
     return (
         <StyledHome>
-            <h2 className="home__title">Добро пожаловать во всемирный онлайн чат!</h2>
-            <h3 className="home__about">Про проект:</h3>
-            <ul className="home__about-list">
-                <li className="home__about-item">🤪Онлайн чат, в котором присутствует лишь одна комната со всеми людьми.</li>
-                <li className="home__about-item">📜Общайтесь, выполняйте задания, получайте уровни профиля и будьте самым крутым в чате!</li>
-                <li className="home__about-item">📈В зависимости от уровня профиля у вас появляются разные возможности.</li>
-                <li className="home__about-item">👪Вы можете посмотреть всех участников онлайн чата, а так же менять конфигурации в пункте 'SETTINGS' влевой части экрана.</li>
-                <li className="home__about-item">💻Если вам вдруг стало что-то непонятно или возникли трудности с чем либо - вы всегда можете обратиться в нашу службу поддержки и писать в любое время суток!</li>
-                <li className="home__about-item">💰Станьте самым лучшим в нашем онлайн чате, удачи!</li>
-            </ul>
-            <div className="form__wrapper">
-                <div className="home__navigate">
-                    <h4 className="home__navigate-title">Ну что, вы готовы присоединиться к самому лучшему комьюнити?</h4>
-                    <button className="form__btn-in" onClick={() => navigate(PATH.chat)}>Connect to room</button>
-                </div>
+            <div className="home">
+                <header className="header">
+                    <div className="home__photo">
+                        <img src="#" alt="" className="home__icon" />
+                        <BsFillPencilFill className="home__icon-pen"/>
+                    </div>
+                    <div className="home__main-info">
+                        <p className="home__name"></p>
+                        <p className="home__lvl">Уровень профиля:</p>
+                    </div>
+                    <p className="home__about"></p>
+                </header>
+                <main className="main">
+                    <ul className="home__list">
+                        <li className="home__list-item">
+                            <Formik initialValues={initialNameValues} validate={validateForm} onSubmit={}>
+                                <Form>
+                                    <button className="home__change">Сменить имя</button>
+                                    <div className="home__list-hidden">
+                                        <input className="home__list-input" type="text" placeholder="Новое имя" />
+                                        <button className="home__list-submit" type="submit">Изменить</button>
+                                    </div>
+                                </Form>
+                            </Formik>
+                        </li>
+                        <li className="home__list-item">
+                            <Formik initialValues={initialPasswordValues} validate={validateForm} onSubmit={}>
+                                <Form>
+                                    <button className="home__change">Сменить пароль</button>
+                                    <div className="home__list-hidden">
+                                        <input className="home__list-input" type="text" placeholder="Старый пароль" />
+                                        <input className="home__list-input" type="text" placeholder="Новый пароль" />
+                                        <button className="home__list-submit" type="submit">Изменить</button>
+                                    </div>
+                                </Form>
+                            </Formik>
+                        </li>
+                    </ul>
+                </main>
             </div>
-            <button className="home__help" type="button" onClick={() => navigate(PATH.support)}>Мне нужна помощь!</button>
+            <p className="home__help" onClick={() => navigate(PATH.support)}>Мне нужна помощь!</p>
             <p className="home__author">Автор проекта: @Abz_mijon</p>
         </StyledHome>
     )
