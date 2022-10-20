@@ -4,7 +4,7 @@ import Aside from "../Components/Aside";
 import { Outlet } from "react-router-dom";
 
 const StyledMainLayout = styled.div `
-    .home {
+    .main-layout {
         position: absolute;
         top: 0;
         left: 0;
@@ -20,7 +20,7 @@ const StyledMainLayout = styled.div `
 function MainLayout():JSX.Element {
         return (
             <StyledMainLayout>
-                <div className="home">
+                <div className="main-layout">
                     <Aside/>
                     <Outlet/>
                 </div>
