@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom'; 
 import { PATH } from '../constans/routes';
 import styled from 'styled-components';
@@ -7,11 +7,13 @@ import { useSelector } from "react-redux";
 import GlobalServerError from "../HOC/GlobalServerError";
 import { BsFillPencilFill } from "react-icons/bs";
 import { Formik, Form } from "formik";
-import { loggedUserPassword } from "../store/selectors/userSelectors";
+import { loggedUserId, loggedUserPassword, loggedUserName } from "../store/selectors/userSelectors";
 import ChangeNameFormikInput from "../Components/FormikInputs/home/changeNameFormikInput";
 import ChangePassFormikInput from "../Components/FormikInputs/home/ChangePassFormikInput";
 import defaultAvatar from '../assets/img/defaultAvatar.jpg'
-import { loggedUserName } from "../store/selectors/userSelectors";
+import { fetchUsers } from "../api/users";
+import Spinner from '../Components/Spinner';
+import ChangeAboutFormikInput from "../Components/FormikInputs/home/ChangeAboutFormikInput";
 
 const StyledHome = styled.div `
     padding: 60px;
@@ -39,8 +41,12 @@ const StyledHome = styled.div `
     }
     .header {
         display: flex;
-        justify-content: center;
+        justify-content: left;
         align-items: center;
+        margin-bottom: 15px;
+    }
+    .home__about {
+        margin-bottom: 35px;
     }
     .home__photo {
         width: 250px;
@@ -56,6 +62,7 @@ const StyledHome = styled.div `
         width: 100%;
         height: 100%;
         border-radius: 50%;
+        transition: 0.3s all;
     }
     .home__photo:hover .home__icon {
         filter: grayscale(1);
@@ -80,6 +87,55 @@ const StyledHome = styled.div `
         font-weight: bold;
         color: #9b4e4e;
     }
+    .home__about-title {
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+    .titles {
+        color: #a5a5a5;
+    }
+    .home__list {
+        width: 100%;
+    }
+    .home__list-item {
+        width: 100%;
+        padding: 10px 0px;
+    }
+    .home__change {
+        padding: 10px 15px;
+        border: none;
+        width: 100%;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 5px;
+        background-color: #dadada;
+        cursor: pointer;
+        transition: 0.3s ease-out;
+        margin-bottom: 10px;
+    }
+    .home__change:hover {
+        transform: scaleY(1.1);
+        background-color: #dadadab0;
+    }
+    .home__list-input {
+        padding: 5px 15px;
+        border: none;
+        outline: none;
+        font-size: 15px;
+        font-weight: bold;
+    }
+    .home__list-input {
+        margin-bottom: 5px;
+        border-radius: 3px;
+    }
+    .home__list-submit {
+        cursor: pointer;
+    }
+    .home__change-warning {
+        text-align: center;
+        margin-top: 20px;
+        color: #a86b6b;
+    }
 `
 
 function Home():JSX.Element {
@@ -91,24 +147,42 @@ function Home():JSX.Element {
         oldPassword: string,
         newPassword: string,
     }
+    type initialAboutValuesTypes = {
+        about: string,
+    }
     type formValuesTypes = {
         newName: string,
         oldPassword: string,
         newPassword: string,
+        about: string,
     }
     type errorsObjTypes = {
         newName?: string,
         oldPassword?: string,
         newPassword?: string,
+        about?: string,
+    }
+    type userTypes = {
+        email: string,
+        password: string,
+        name: string,
+        id: number | string,
+        level: number | string,
+        messageAmount: number | string,
+        about: string,
     }
     
     const navigate = useNavigate();
     const isError = useSelector(isServerError);
     const password = useSelector(loggedUserPassword);
+    const userId = useSelector(loggedUserId);
     const [changeName, setChangeName] = useState(false);
     const [changePass, setChangePass] = useState(false);
+    const [changeAbout, setChangeAbout] = useState(false);
     const userName = useSelector(loggedUserName);
     const [changeTitle, setChangeTitle] = useState(false);
+    const [aboutText, setAboutText] = useState('');
+    const [userLvl, setUserLvl] = useState(null);
 
     const initialNameValues:initialNameValuesTypes = {
         newName: '',
@@ -116,6 +190,9 @@ function Home():JSX.Element {
     const initialPasswordValues:initialPasswordValuesTypes = {
         oldPassword: '',
         newPassword: '',
+    }
+    const initialAboutValues: initialAboutValuesTypes = {
+        about: '',
     }
 
     const validateForm = ((formValues:formValuesTypes): void | errorsObjTypes => {        
@@ -142,14 +219,30 @@ function Home():JSX.Element {
             isPassed = false;
             errorsObj.oldPassword = 'Пароль не совпадает со старым!'
         }
+        if(changeAbout && !formValues.about.length) {
+            isPassed = false;
+            errorsObj.about = 'Обязательное поле для заполнения!'
+        }
 
         isPassed = false;
         if(!isPassed) return errorsObj;
     })
 
+    useEffect(() => {
+        fetchUsers().then(response => {
+            const thisUser = response.data.find((user: userTypes) => {                
+                return user.id === userId;
+            })
+            setAboutText(thisUser.about);
+            setUserLvl(thisUser.level);
+        })
+    }, []);
 
     if(isError) {
         return <GlobalServerError/>
+    }
+    if(!aboutText.length && userLvl === null) {
+        return <Spinner/>
     }
 
     return (
@@ -162,11 +255,12 @@ function Home():JSX.Element {
                         {changeTitle && <h5 className="home__change-title">Сменить аватарку</h5>}
                     </div>
                     <div className="home__main-info">
-                        <p className="home__name">Имя: {userName}</p>
-                        <p className="home__lvl">Уровень профиля:</p>
+                        <p className="home__name"><span className="titles">Имя:</span> {userName}</p>
+                        <p className="home__lvl"><span className="titles">Уровень профиля:</span> {userLvl}</p>
                     </div>
-                    <p className="home__about"></p>
                 </header>
+                    <h4 className="home__about-title titles">Информация о себе:</h4>
+                    <p className="home__about">{aboutText}</p>
                 <main className="main">
                     <ul className="home__list">
                         <li className="home__list-item">
@@ -177,6 +271,7 @@ function Home():JSX.Element {
                                     <button type="button" className="home__change" onClick={() => {
                                         setChangeName(!changeName)
                                         setChangePass(false);
+                                        setChangeAbout(false);
                                     }}>Сменить имя</button>
                                     {changeName &&
                                         <div className="home__list-hidden">
@@ -195,6 +290,7 @@ function Home():JSX.Element {
                                     <button type="button" className="home__change" onClick={() => {
                                         setChangePass(!changePass);
                                         setChangeName(false);
+                                        setChangeAbout(false);
                                     }}>Сменить пароль</button>
                                     {changePass &&
                                         <div className="home__list-hidden">
@@ -206,11 +302,33 @@ function Home():JSX.Element {
                                 </Form>
                             </Formik>
                         </li>
+                        <li className="home__list-item">
+                            <Formik initialValues={initialAboutValues} validate={validateForm} onSubmit={(formValues: any) => {
+                                console.log(formValues);
+                            }}>
+                                <Form>
+                                    <button type="button" className="home__change" onClick={() => {
+                                        setChangeAbout(!changeAbout);
+                                        setChangePass(false);
+                                        setChangeName(false);
+                                    }}>Сменить описание</button>
+                                    {changeAbout &&
+                                        <div className="home__list-hidden">
+                                            <ChangeAboutFormikInput name='about' className="home__list-input" type="text" placeholder="Ваше описание.." />
+                                            <button className="home__list-submit" type="submit">Изменить</button>
+                                        </div>
+                                    }
+                                </Form>
+                            </Formik>
+                        </li>
                     </ul>
+                    <p className="home__change-warning">Осторожно! При изменении логина, пароля или описания, возможно вам придется перезайти в аккаунт!</p>
                 </main>
             </div>
-            <p className="home__help" onClick={() => navigate(PATH.support)}>Мне нужна помощь!</p>
-            <p className="home__author">Автор проекта: @Abz_mijon</p>
+            <footer>
+                <p className="home__help" onClick={() => navigate(PATH.support)}>Мне нужна помощь!</p>
+                <p className="home__author">Автор проекта: @Abz_mijon</p>
+            </footer>
         </StyledHome>
     )
 };

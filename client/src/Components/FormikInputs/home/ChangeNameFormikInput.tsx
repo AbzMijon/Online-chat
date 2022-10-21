@@ -5,7 +5,6 @@ import styled from 'styled-components';
 const StyledChangeNameFormikInput = styled.div `
     .field {
         position: relative;
-        margin-bottom: 20px;
     }
     .field__error {
         color: #921919;

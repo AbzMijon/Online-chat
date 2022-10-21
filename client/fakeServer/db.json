@@ -100,6 +100,15 @@
       "id": 783,
       "level": 0,
       "messageAmount": 4
+    },
+    {
+      "email": "som@gmail.com",
+      "password": "$2a$10$1M6/kFAAVQiAM0/EafqpiOmkHOqOVEvs.FN2wA9KpiQDSVyBL1oAS",
+      "name": "Som",
+      "id": 723,
+      "level": 0,
+      "messageAmount": 0,
+      "about": "Информация о себе.."
     }
   ],
   "supportMessages": [

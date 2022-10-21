@@ -2,7 +2,7 @@ import React from "react";
 import { useField } from "formik";
 import styled from 'styled-components';
 
-const StyledChangePassFormikInput = styled.div `
+const StyledChangeAboutFormikInput = styled.div `
     .field {
         position: relative;
     }
@@ -28,20 +28,20 @@ const StyledChangePassFormikInput = styled.div `
     }
 `
 
-function ChangePassFormikInput(props) {
+function ChangeAboutFormikInput(props) {
     
 	const [field, meta, helpers] = useField(props.name);
     
 	return (
-        <StyledChangePassFormikInput>
+        <StyledChangeAboutFormikInput>
             <div className='field'>
-                <input className={meta.touched && meta.error ? 'home__field--error' : 'home__field'} {...props} {...field} />
+                <textarea className={meta.touched && meta.error ? 'home__field--error' : 'home__field'} {...props} {...field} />
                 {meta.touched && meta.error && (
                     <p className='field__error'>{meta.error}</p>
                 )}
 		    </div>
-        </StyledChangePassFormikInput>
+        </StyledChangeAboutFormikInput>
 	);
 }
 
-export default ChangePassFormikInput;
+export default ChangeAboutFormikInput;
