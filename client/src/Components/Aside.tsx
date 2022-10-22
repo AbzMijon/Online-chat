@@ -6,7 +6,6 @@ import { BsFillChatDotsFill } from 'react-icons/bs';
 import { FiSettings } from 'react-icons/fi';
 import { FaUsers } from 'react-icons/fa';
 import { BiSupport, BiLogOut } from 'react-icons/bi';
-import { loggedUserName } from "../store/selectors/userSelectors";
 import { useSelector, useDispatch } from "react-redux";
 import defautAvatar from '../assets/img/defaultAvatar.jpg';
 import { useNavigate } from "react-router-dom";
@@ -14,6 +13,8 @@ import { PATH, ROUTES } from "../constans/routes";
 import { fetchUsers } from "../api/users";
 import { userlvlColor } from "../helpers/userlvlColor";
 import { userEmail } from "../store/selectors/userSelectors";
+import { ThreeDots } from "react-loader-spinner";
+import { array } from "prop-types";
 
 const StyledAside = styled.div `
     .aside {
@@ -149,7 +150,7 @@ const StyledAside = styled.div `
 function Aside():JSX.Element {
 
     const userMail = useSelector(userEmail);
-    const userName = useSelector(loggedUserName);
+    const [userName, setUserName] = useState('');
     const [handleName, setHandleName] = useState(false);
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -166,6 +167,7 @@ function Aside():JSX.Element {
                 return user.email === userMail;
             })
             setLvlColor(findUser.level);
+            setUserName(findUser.name);
         })
     }, []);
 
@@ -179,7 +181,18 @@ function Aside():JSX.Element {
                         <div className="aside__lvl" style={{border: `2px solid ${userlvlColor(lvlColor)}`, color: `${userlvlColor(lvlColor)}`}}>{lvlColor}</div>
                     </div>
                     <div className="aside__name-wrapper" onClick={() => setHandleName(!handleName)}>
-                        <h5 className="aside__name">{userName}</h5>
+                        <h5 className="aside__name">{!userName.length ?             
+                            <ThreeDots
+                                height="10" 
+                                width="20" 
+                                radius="9"
+                                color="#fff" 
+                                ariaLabel="three-dots-loading"
+                                wrapperStyle={{}}
+                                visible={true}
+                            /> 
+                        :
+                        userName}</h5>
                         <MdKeyboardArrowDown className="aside__name-arrow"/>
                     </div>
                     <div className={handleName ? "aside__hidden-block--handle" : "aside__hidden-block"}>
@@ -207,7 +220,7 @@ function Aside():JSX.Element {
                             : 'aside__menu-item'} 
                             onClick={() => navigate(PATH.users)}>
                             <FaUsers className='aside__icon aside__notif-icon'/>USERS</li>
-                        <li className={location === PATH.settings 
+                        <li className={location === PATH.achives 
                             ? 'aside__menu-item--active' 
                             : 'aside__menu-item'} 
                             onClick={() => navigate(PATH.achives)}>

@@ -203,7 +203,7 @@ function LoginPage():JSX.Element {
                                     {
                                         name: dontHaveAcc ? formvalues.name : findUser.name, 
                                         email: formvalues.email, 
-                                        id: formvalues.id,
+                                        id: dontHaveAcc ? formvalues.id : findUser.id,
                                         color: randColor(),
                                     }})
                                     navigate(PATH.homePage);

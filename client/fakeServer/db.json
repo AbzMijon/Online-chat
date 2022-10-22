@@ -109,6 +109,15 @@
       "level": 0,
       "messageAmount": 0,
       "about": "Информация о себе.."
+    },
+    {
+      "email": "b@gmail.com",
+      "password": "$2a$10$lD0yjlCqqJ5ZU3vRzVjZeuhClBVB.tUz0vjUdrFAAtTlXszUhals.",
+      "name": "Bommi",
+      "id": 551,
+      "level": 0,
+      "messageAmount": 0,
+      "about": "Крутой пупс лучшего онлайн чата в мире!"
     }
   ],
   "supportMessages": [

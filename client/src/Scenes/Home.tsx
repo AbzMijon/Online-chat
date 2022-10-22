@@ -7,13 +7,15 @@ import { useSelector } from "react-redux";
 import GlobalServerError from "../HOC/GlobalServerError";
 import { BsFillPencilFill } from "react-icons/bs";
 import { Formik, Form } from "formik";
-import { loggedUserId, loggedUserPassword, loggedUserName } from "../store/selectors/userSelectors";
+import { loggedUserId } from "../store/selectors/userSelectors";
 import ChangeNameFormikInput from "../Components/FormikInputs/home/changeNameFormikInput";
 import ChangePassFormikInput from "../Components/FormikInputs/home/ChangePassFormikInput";
 import defaultAvatar from '../assets/img/defaultAvatar.jpg'
 import { fetchUsers } from "../api/users";
 import Spinner from '../Components/Spinner';
 import ChangeAboutFormikInput from "../Components/FormikInputs/home/ChangeAboutFormikInput";
+import { fetchUserChangeName, fetchUserChangePass, fetchUserChangeAbout } from "../api/users";
+import DeleteAccTry from "../Components/DeleteAccTry";
 
 const StyledHome = styled.div `
     padding: 60px;
@@ -101,8 +103,8 @@ const StyledHome = styled.div `
         width: 100%;
         padding: 10px 0px;
     }
-    .home__change {
-        padding: 10px 15px;
+    .home__change, .home__change--active {
+        padding: 8px 15px;
         border: none;
         width: 100%;
         font-size: 20px;
@@ -116,6 +118,9 @@ const StyledHome = styled.div `
     .home__change:hover {
         transform: scaleY(1.1);
         background-color: #dadadab0;
+    }
+    .home__change--active {
+        color: #8a3131;
     }
     .home__list-input {
         padding: 5px 15px;
@@ -136,6 +141,27 @@ const StyledHome = styled.div `
         margin-top: 20px;
         color: #a86b6b;
     }
+    .delete-btn {
+        padding: 10px 15px;
+        border: none;
+        outline: none;
+        font-size: 17px;
+        color: #fff;
+        background-color: #8a3131;
+        cursor: pointer;
+        transition: 0.2s all;
+        border-radius: 2px;
+    }
+    .delete-btn:hover {
+        background-color: #6d2121;
+    }
+    .delete-btn__wrap {
+        margin: 40px 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
 `
 
 function Home():JSX.Element {
@@ -144,7 +170,6 @@ function Home():JSX.Element {
         newName: string,
     }
     type initialPasswordValuesTypes = {
-        oldPassword: string,
         newPassword: string,
     }
     type initialAboutValuesTypes = {
@@ -152,13 +177,11 @@ function Home():JSX.Element {
     }
     type formValuesTypes = {
         newName: string,
-        oldPassword: string,
         newPassword: string,
         about: string,
     }
     type errorsObjTypes = {
         newName?: string,
-        oldPassword?: string,
         newPassword?: string,
         about?: string,
     }
@@ -174,21 +197,20 @@ function Home():JSX.Element {
     
     const navigate = useNavigate();
     const isError = useSelector(isServerError);
-    const password = useSelector(loggedUserPassword);
     const userId = useSelector(loggedUserId);
     const [changeName, setChangeName] = useState(false);
     const [changePass, setChangePass] = useState(false);
     const [changeAbout, setChangeAbout] = useState(false);
-    const userName = useSelector(loggedUserName);
+    const [userName, setUserName] = useState('');
     const [changeTitle, setChangeTitle] = useState(false);
     const [aboutText, setAboutText] = useState('');
     const [userLvl, setUserLvl] = useState(null);
+    const [handleDeleteAcc, setHandleDeleteAcc] = useState(false);
 
     const initialNameValues:initialNameValuesTypes = {
         newName: '',
     }
     const initialPasswordValues:initialPasswordValuesTypes = {
-        oldPassword: '',
         newPassword: '',
     }
     const initialAboutValues: initialAboutValuesTypes = {
@@ -211,13 +233,9 @@ function Home():JSX.Element {
             isPassed = false;
             errorsObj.newPassword = 'Обязательное поле для заполнения!'
         }
-        if(changePass && !formValues.oldPassword.length) {
+        if(changePass && formValues.newPassword.length <= 3 && formValues.newPassword.length >= 1) {
             isPassed = false;
-            errorsObj.oldPassword = 'Обязательное поле для заполнения!'
-        }
-        if(changePass && formValues.oldPassword !== password) {
-            isPassed = false;
-            errorsObj.oldPassword = 'Пароль не совпадает со старым!'
+            errorsObj.newPassword = 'Ненадежный пароль!'
         }
         if(changeAbout && !formValues.about.length) {
             isPassed = false;
@@ -235,6 +253,7 @@ function Home():JSX.Element {
             })
             setAboutText(thisUser.about);
             setUserLvl(thisUser.level);
+            setUserName(thisUser.name);
         })
     }, []);
 
@@ -246,7 +265,11 @@ function Home():JSX.Element {
     }
 
     return (
+        
         <StyledHome>
+            {handleDeleteAcc&& 
+                <DeleteAccTry setHandleDeleteAcc={setHandleDeleteAcc} userId={userId}/>
+            }
             <div className="home">
                 <header className="header">
                     <div className="home__photo" onMouseLeave={() => setChangeTitle(false)} onMouseOver={() => setChangeTitle(true)}>
@@ -265,10 +288,11 @@ function Home():JSX.Element {
                     <ul className="home__list">
                         <li className="home__list-item">
                             <Formik initialValues={initialNameValues} validate={validateForm} onSubmit={(formValues: any) => {
-                                console.log(formValues);
+                                fetchUserChangeName(userId, formValues.newName);
+                                location.reload();
                             }}>
                                 <Form>
-                                    <button type="button" className="home__change" onClick={() => {
+                                    <button type="button" className={changeName ? "home__change--active" : "home__change"} onClick={() => {
                                         setChangeName(!changeName)
                                         setChangePass(false);
                                         setChangeAbout(false);
@@ -284,18 +308,18 @@ function Home():JSX.Element {
                         </li>
                         <li className="home__list-item">
                             <Formik initialValues={initialPasswordValues} validate={validateForm} onSubmit={(formValues: any) => {
-                                console.log(formValues);
+                                fetchUserChangePass(userId, formValues.newPassword);
+                                location.reload();
                             }}>
                                 <Form>
-                                    <button type="button" className="home__change" onClick={() => {
+                                    <button type="button" className={changePass ? "home__change--active" : "home__change"} onClick={() => {
                                         setChangePass(!changePass);
                                         setChangeName(false);
                                         setChangeAbout(false);
                                     }}>Сменить пароль</button>
                                     {changePass &&
                                         <div className="home__list-hidden">
-                                            <ChangePassFormikInput name='oldPassword' className="home__list-input" type="text" placeholder="Старый пароль" />
-                                            <ChangePassFormikInput name='newPassword' className="home__list-input" type="text" placeholder="Новый пароль" />
+                                            <ChangePassFormikInput name='newPassword' className="home__list-input" type="password" placeholder="Новый пароль" />
                                             <button className="home__list-submit" type="submit">Изменить</button>
                                         </div>
                                     }
@@ -304,10 +328,11 @@ function Home():JSX.Element {
                         </li>
                         <li className="home__list-item">
                             <Formik initialValues={initialAboutValues} validate={validateForm} onSubmit={(formValues: any) => {
-                                console.log(formValues);
+                                fetchUserChangeAbout(userId, formValues.about);
+                                location.reload();
                             }}>
                                 <Form>
-                                    <button type="button" className="home__change" onClick={() => {
+                                    <button type="button" className={changeAbout ? "home__change--active" : "home__change"} onClick={() => {
                                         setChangeAbout(!changeAbout);
                                         setChangePass(false);
                                         setChangeName(false);
@@ -322,7 +347,10 @@ function Home():JSX.Element {
                             </Formik>
                         </li>
                     </ul>
-                    <p className="home__change-warning">Осторожно! При изменении логина, пароля или описания, возможно вам придется перезайти в аккаунт!</p>
+                    <p className="home__change-warning">Осторожно! Следующая функция удалит ваш аккаунт навсегда!</p>
+                    <div className="delete-btn__wrap">
+                        <button className="delete-btn" type="button" onClick={() => setHandleDeleteAcc(true)}>Удалить аккаунт</button>
+                    </div>
                 </main>
             </div>
             <footer>
