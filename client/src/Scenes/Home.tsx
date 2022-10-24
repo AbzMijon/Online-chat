@@ -16,8 +16,12 @@ import Spinner from '../Components/Spinner';
 import ChangeAboutFormikInput from "../Components/FormikInputs/home/ChangeAboutFormikInput";
 import { fetchUserChangeName, fetchUserChangePass, fetchUserChangeAbout } from "../api/users";
 import DeleteAccTry from "../Components/DeleteAccTry";
+import { userlvlColor } from "../helpers/userlvlColor";
+import { initialNameValuesTypes, initialPasswordValuesTypes, initialAboutValuesTypes, userTypes } from './Home/types';
+import { validateForm } from "./Home/validateForm";
 
 const StyledHome = styled.div `
+    overflow: auto;
     padding: 60px;
     margin: 0;
     background-color: #161b22;
@@ -104,7 +108,7 @@ const StyledHome = styled.div `
         padding: 10px 0px;
     }
     .home__change, .home__change--active {
-        padding: 8px 15px;
+        padding: 5px 15px;
         border: none;
         width: 100%;
         font-size: 20px;
@@ -165,35 +169,6 @@ const StyledHome = styled.div `
 `
 
 function Home():JSX.Element {
-
-    type initialNameValuesTypes = {
-        newName: string,
-    }
-    type initialPasswordValuesTypes = {
-        newPassword: string,
-    }
-    type initialAboutValuesTypes = {
-        about: string,
-    }
-    type formValuesTypes = {
-        newName: string,
-        newPassword: string,
-        about: string,
-    }
-    type errorsObjTypes = {
-        newName?: string,
-        newPassword?: string,
-        about?: string,
-    }
-    type userTypes = {
-        email: string,
-        password: string,
-        name: string,
-        id: number | string,
-        level: number | string,
-        messageAmount: number | string,
-        about: string,
-    }
     
     const navigate = useNavigate();
     const isError = useSelector(isServerError);
@@ -217,35 +192,6 @@ function Home():JSX.Element {
         about: '',
     }
 
-    const validateForm = ((formValues:formValuesTypes): void | errorsObjTypes => {        
-        let isPassed = true;
-        let errorsObj:errorsObjTypes = {};
-
-        if(changeName && !formValues.newName.length) {
-            isPassed = false;
-            errorsObj.newName = 'Обязательное поле для заполнения!'
-        }
-        if(changeName && formValues.newName.length > 13) {
-            isPassed = false;
-            errorsObj.newName = 'Слишком длинное имя'
-        }
-        if(changePass && !formValues.newPassword.length) {
-            isPassed = false;
-            errorsObj.newPassword = 'Обязательное поле для заполнения!'
-        }
-        if(changePass && formValues.newPassword.length <= 3 && formValues.newPassword.length >= 1) {
-            isPassed = false;
-            errorsObj.newPassword = 'Ненадежный пароль!'
-        }
-        if(changeAbout && !formValues.about.length) {
-            isPassed = false;
-            errorsObj.about = 'Обязательное поле для заполнения!'
-        }
-
-        isPassed = false;
-        if(!isPassed) return errorsObj;
-    })
-
     useEffect(() => {
         fetchUsers().then(response => {
             const thisUser = response.data.find((user: userTypes) => {                
@@ -265,14 +211,13 @@ function Home():JSX.Element {
     }
 
     return (
-        
         <StyledHome>
             {handleDeleteAcc&& 
                 <DeleteAccTry setHandleDeleteAcc={setHandleDeleteAcc} userId={userId}/>
             }
             <div className="home">
                 <header className="header">
-                    <div className="home__photo" onMouseLeave={() => setChangeTitle(false)} onMouseOver={() => setChangeTitle(true)}>
+                    <div className="home__photo" onMouseLeave={() => setChangeTitle(false)} onMouseOver={() => setChangeTitle(true)} style={{border: `3px solid ${userlvlColor(userLvl)}`, boxShadow: `0 0 40px ${userlvlColor(userLvl)}`}}>
                         <img src={defaultAvatar} alt="" className="home__icon" />
                         <BsFillPencilFill className="home__icon-pen"/>
                         {changeTitle && <h5 className="home__change-title">Сменить аватарку</h5>}
