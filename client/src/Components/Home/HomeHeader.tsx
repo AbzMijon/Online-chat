@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import styled from 'styled-components';
 import defaultAvatar from '../../assets/img/defaultAvatar.jpg';
 import { userlvlColor } from "../../helpers/userlvlColor";
-import { loggedUserId } from "../../store/selectors/userSelectors";
 import { BsFillPencilFill } from "react-icons/bs";
+import ThemeSwitcher from "../ThemeSwither";
 
 const StyledHomeHeader = styled.div `
     .header {
         margin-bottom: 35px;
+        position: relative;
     }
     .header__wrap {
         display: flex;
@@ -48,6 +48,7 @@ const StyledHomeHeader = styled.div `
         height: 25px;
         padding: 5px;
         font-size: 20px;
+        color: #fff;
     }
     .home__change-title {
         position: absolute;
@@ -93,6 +94,7 @@ function HomeHeader({ userLvl, userName, aboutText }):JSX.Element {
                 </div>
                 <h4 className="home__about-title titles">Информация о себе:</h4>
                 <p className="home__about">{aboutText}</p>
+                <ThemeSwitcher/>
             </header>
         </StyledHomeHeader>
     )

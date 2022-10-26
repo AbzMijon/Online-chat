@@ -9,20 +9,21 @@ import { loggedUserId } from "../store/selectors/userSelectors";
 import { fetchUsers } from "../api/users";
 import Spinner from '../Components/Spinner';
 import DeleteAccTry from "../Components/DeleteAccTry";
-import HomeHeader from "./Home/HomeHeader";
-import ChangeName from "./Home/ChangeName";
-import ChangePass from "./Home/ChangePass";
-import ChangeAbout from "./Home/ChangeAbout";
+import HomeHeader from "../Components/Home/HomeHeader";
+import ChangeName from '../Components/Home/ChangeName';
+import ChangePass from '../Components/Home/ChangePass';
+import ChangeAbout from '../Components/Home/ChangeAbout';
 
 const StyledHome = styled.div `
     overflow: auto;
     padding: 60px;
     margin: 0;
-    background-color: #161b22;
+    background-color: ${(props: { theme: { backgroundColor: any; }; }) => props.theme.backgroundColor};
     position: relative;
     .home {
         padding: 20px 80px;
         height: 100%;
+        color: ${(props: { theme: { fontColor: any; }; }) => props.theme.fontColor};
     }
     .home__author {
         position: absolute;
@@ -53,14 +54,14 @@ const StyledHome = styled.div `
         font-size: 20px;
         font-weight: bold;
         border-radius: 5px;
-        background-color: #dadada;
+        background-color: ${(props: { theme: { elemsBackground: any; }; }) => props.theme.elemsBackground};
         cursor: pointer;
         transition: 0.3s ease-out;
         margin-bottom: 10px;
+        color: ${(props) => props.theme.changeFontColor};
     }
     .home__change:hover {
         transform: scaleY(1.1);
-        background-color: #dadadab0;
     }
     .home__change--active {
         color: #8a3131;
@@ -71,13 +72,15 @@ const StyledHome = styled.div `
         outline: none;
         font-size: 15px;
         font-weight: bold;
-    }
-    .home__list-input {
         margin-bottom: 5px;
         border-radius: 3px;
+        background-color: ${(props) => props.theme.elemsBackground};
+        color: ${(props) => props.theme.changeFontColor};
     }
     .home__list-submit {
         cursor: pointer;
+        background-color: ${(props) => props.theme.elemsBackground};
+        color: ${(props) => props.theme.changeFontColor};
     }
     .home__change-warning {
         text-align: center;

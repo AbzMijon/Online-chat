@@ -11,6 +11,7 @@ import Messages from "../Components/Messages";
 import EmojiPopup from "../Components/EmojiPopup";
 import styled from 'styled-components';
 import darkBackground from '../assets/img/darkBackground.jpg';
+import lightBG from '../assets/img/lightBG.jpg'
 
 const StyledChat = styled.div `
     .form__wrapper {
@@ -33,7 +34,7 @@ const StyledChat = styled.div `
         width: 100%;
         padding: 20px 25px;
         border-radius: 10px;
-        background-color: #212121;
+        background-color: ${(props) => props.theme.chatInput};
         border: 1px solid #363636;
         position: absolute;
         bottom: 30px;
@@ -86,6 +87,9 @@ const StyledChat = styled.div `
     }
     .main {
         margin-top: 60px;
+    }
+    .bismile, .aioutlinesend {
+        color: ${(props) => props.theme.fontColor};
     }
 `
 
@@ -176,7 +180,7 @@ function Chat():JSX.Element {
                             userName={userName}
                         />
                         <div className="form">
-                            <button className="form__btn form__btn-smile" type="button" onClick={() => setHandleStiker(!handleStiker)}><BiSmile/></button>
+                            <button className="form__btn form__btn-smile" type="button" onClick={() => setHandleStiker(!handleStiker)}><BiSmile className="bismile"/></button>
                             <input value={messageValue} onKeyDown={(keyPress) => {
                                 if(keyPress.keyCode === 13) {
                                     sendMessage();
@@ -189,7 +193,7 @@ function Chat():JSX.Element {
                             className="form__input" 
                             placeholder="Message.." 
                             type="text"/>
-                            <button type="button" className="form__btn" onClick={sendMessage}><AiOutlineSend/></button>
+                            <button type="button" className="form__btn" onClick={sendMessage}><AiOutlineSend className="aioutlinesend"/></button>
                         </div>
                         <EmojiPopup 
                             handleStiker={handleStiker} 

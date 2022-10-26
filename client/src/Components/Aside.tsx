@@ -14,13 +14,12 @@ import { fetchUsers } from "../api/users";
 import { userlvlColor } from "../helpers/userlvlColor";
 import { userEmail } from "../store/selectors/userSelectors";
 import { ThreeDots } from "react-loader-spinner";
-import { array } from "prop-types";
 
 const StyledAside = styled.div `
     .aside {
         position: relative;
         padding: 60px 50px;
-        background-color: #0d1117;
+        background-color: ${(props) => props.theme.asideBackground};
         border-right: 1px solid #c7c7c7;
         height: 100%;
     }
@@ -50,12 +49,12 @@ const StyledAside = styled.div `
         font-size: 15px;
         font-weight: bold;
         letter-spacing: 1px;
-        color: #c7c7c7;
+        color: ${(props) => props.theme.fontColor};
     }
     .aside__name-arrow {
         font-size: 18px;
         font-weight: bold;
-        color: #c7c7c7;
+        color: ${(props) => props.theme.fontColor};
     }
     .aside__hidden-block {
         display: none;
@@ -74,13 +73,13 @@ const StyledAside = styled.div `
         font-size: 12px;
         text-transform: uppercase;
         cursor: pointer;
-        color: #c7c7c7;
+        color: ${(props) => props.theme.fontColor};
     } 
     .aside__hidden-item:hover {
-        color: #fff;
+        color: ${(props) => props.theme.fontColor};
     }
     .aside__menu-item {
-        color: #5c5c5c;
+        color: ${(props) => props.theme.fontColor};
         cursor: pointer;
         transition: 0.2s ease-in;
         padding: 15px 5px;
@@ -92,8 +91,8 @@ const StyledAside = styled.div `
         border-bottom: 1px solid transparent;
     }
     .aside__menu-item:hover {
-        border-bottom: 1px solid #fff;
-        color: #fff;
+        border-bottom: 1px solid ${(props) => props.theme.fontColor};
+        color: ${(props) => props.theme.fontColor};
     }
     .aside__icon {
         font-size: 17px;
@@ -108,8 +107,8 @@ const StyledAside = styled.div `
         font-size: 15px;
         letter-spacing: 2px;
         font-weight: bold;
-        border-bottom: 1px solid #fff;
-        color: #fff;
+        border-bottom: 1px solid ${(props) => props.theme.fontColor};
+        color: ${(props) => props.theme.fontColor};
     }
     .aside__logout {
         position: absolute;

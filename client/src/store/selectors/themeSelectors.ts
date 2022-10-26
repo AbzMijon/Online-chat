@@ -1,0 +1,1 @@
+export const themeMode = (state: { theme: { theme: string; }; }) => state.theme.theme;

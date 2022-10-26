@@ -8,17 +8,17 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const StyledChatHeader = styled.div `
-        .chat__name {
+    .chat__name {
         font-size: 19px;
         text-align: center;
-        color: #c4c4c4;
+        color: ${(props) => props.theme.fontColor};
     }
     .header {
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        background-color: #0d1117;
+        background-color: ${(props) => props.theme.backgroundColor};
         display: flex;
         justify-content: center;
         align-items: center;
@@ -28,7 +28,7 @@ const StyledChatHeader = styled.div `
         z-index: 3;
     }
     .chat__users {
-        color: #d4d4d4;
+        color: ${(props) => props.theme.fontColor};
         display: flex;
         cursor: pointer;
     }
@@ -43,15 +43,15 @@ const StyledChatHeader = styled.div `
     }
     .chat__search-icon {
         font-size: 25px;
-        color: #e9e9e9;
+        color: ${(props) => props.theme.fontColor};
         cursor: pointer;
     }
     .chat__search-input {
         border: none;
         outline: none;
-        background-color: #212121;
+        background-color: ${(props) => props.theme.chatInput};
         font-size: 22px;
-        color: #949494;
+        color: ${(props) => props.theme.fontColor};
         padding: 10px 15px;
         border-radius: 5px;
         margin-right: 15px;
@@ -61,7 +61,7 @@ const StyledChatHeader = styled.div `
         top: 50%;
         transform: translateY(-50%);
         left: 50px;
-        color: #e4e4e4;
+        color: ${(props) => props.theme.fontColor};
         font-size: 17px;
         display: flex;
         align-items: center;
