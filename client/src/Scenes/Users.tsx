@@ -14,12 +14,12 @@ import GlobalServerError from "../HOC/GlobalServerError";
 const StyledUsers = styled.div `
     overflow: auto;
     padding: 40px 30px;
-    background-color: #161b22;
+    background-color: ${(props) => props.theme.backgroundColor};
     .users__title {
         text-align: center;
         font-size: 45px;
         font-weight: bold;
-        color: #fff;
+        color: ${(props) => props.theme.fontColor};
         margin-bottom: 25px;
     }
     .users__sort {
@@ -30,7 +30,7 @@ const StyledUsers = styled.div `
     }
     .users__sort-title {
         margin-right: 15px;
-        color: #fff;
+        color: ${(props) => props.theme.fontColor};
     }
     .users__list {
         display: grid;

@@ -32,8 +32,8 @@ const StyledSupportSelect = styled.div `
         font-weight: 400;
         font-size: 14px;
         line-height: 16px;
-        background-color: #0d1117;
-        color: #fff;
+        background-color: ${(props) => props.theme.asideBackground};
+        color: ${(props) => props.theme.fontColor};
         border-radius: 5px;
         padding: 18px 22px;
         width: 100%;

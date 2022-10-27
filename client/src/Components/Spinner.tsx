@@ -8,12 +8,12 @@ const StyledSpinner = styled.div `
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #131014;
+    background-color: ${(props) => props.theme.backgroundColor};
     .spinner__title {
         font-size: 30px;
         font-weight: bold;
         margin-right: 15px;
-        color: #fff;
+        color: ${(props) => props.theme.fontColor};
     }
 `
 

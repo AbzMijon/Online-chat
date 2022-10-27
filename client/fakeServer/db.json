@@ -156,6 +156,24 @@
       "problem": "У меня вечная загрузка чата, помогите!",
       "userEmail": "evil@gmail.com",
       "id": 5
+    },
+    {
+      "problemGroup": "4",
+      "problem": "Как дела разрабы??",
+      "userEmail": "proegorka@gmail.com",
+      "id": 6
+    },
+    {
+      "problemGroup": "1",
+      "problem": "Не вижу сообщений других юзеров",
+      "userEmail": "proegorka@gmail.com",
+      "id": 7
+    },
+    {
+      "problemGroup": "3",
+      "problem": "asdasdasdasd",
+      "userEmail": "proegorka@gmail.com",
+      "id": 8
     }
   ]
 }

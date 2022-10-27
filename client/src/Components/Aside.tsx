@@ -9,7 +9,7 @@ import { BiSupport, BiLogOut } from 'react-icons/bi';
 import { useSelector, useDispatch } from "react-redux";
 import defautAvatar from '../assets/img/defaultAvatar.jpg';
 import { useNavigate } from "react-router-dom";
-import { PATH, ROUTES } from "../constans/routes";
+import { PATH } from "../constans/routes";
 import { fetchUsers } from "../api/users";
 import { userlvlColor } from "../helpers/userlvlColor";
 import { userEmail } from "../store/selectors/userSelectors";
@@ -35,8 +35,12 @@ const StyledAside = styled.div `
         border: 1px solid #5c5c5c;
         border-radius: 50%;
         width: 170px;
+        cursor: pointer;
         height: 170px;
         margin-bottom: 15px;
+    }
+    .aside__avatar:hover {
+        filter: grayscale(1);
     }
     .aside__name-wrapper {
         display: flex;
@@ -173,9 +177,8 @@ function Aside():JSX.Element {
     return (
         <StyledAside>
             <aside className="aside">
-
                 <header className="aside__header">
-                    <div className="aside__img">
+                    <div className="aside__img" onClick={() => navigate(PATH.homePage)}>
                         <img src={defautAvatar} alt="avatar" className="aside__avatar" style={{border: `4px solid ${userlvlColor(lvlColor)}`}}/>
                         <div className="aside__lvl" style={{border: `2px solid ${userlvlColor(lvlColor)}`, color: `${userlvlColor(lvlColor)}`}}>{lvlColor}</div>
                     </div>
@@ -196,7 +199,7 @@ function Aside():JSX.Element {
                     </div>
                     <div className={handleName ? "aside__hidden-block--handle" : "aside__hidden-block"}>
                         <ul className="aside__hidden-list">
-                            <li className="aside__hidden-item" onClick={() => navigate(ROUTES.support)}>support</li>
+                            <li className="aside__hidden-item" onClick={() => navigate(PATH.support)}>support</li>
                             <li className="aside__hidden-item" onClick={logout}>log out</li>
                         </ul>
                     </div>

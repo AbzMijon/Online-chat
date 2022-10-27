@@ -25,13 +25,15 @@ const StyledDeleteAccTry = styled.div `
         justify-content: center;
         align-items: center;
         flex-direction: column;
-        background-color: #242424;
+        background-color: ${(props) => props.theme.backgroundColor};
         border: 1px solid #fff;
+        z-index: 5;
     }
     .card__title {
         font-weight: bold;
         margin-bottom: 15px;
         font-size: 19px;
+        color: ${(props) => props.theme.fontColor};
     }
     .card__answers {
         display: flex;

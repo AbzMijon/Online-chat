@@ -12,9 +12,9 @@ import { useSelector } from "react-redux";
 
 const StyledSupport = styled.div`
     padding: 20px 25px;
-    background-color: #161b22;
+    background-color: ${(props) => props.theme.backgroundColor};
     .support__title {
-        color: #fff;
+        color: ${(props) => props.theme.fontColor};
         font-size: 35px;
         font-weight: bold;
         margin-bottom: 35px;
@@ -32,11 +32,11 @@ const StyledSupport = styled.div`
     }
     .support__btn {
         padding: 10px 15px;
-        background-color: #0d1117;
+        background-color: ${(props) => props.theme.asideBackground};
         border-radius: 5px;
         font-size: 15px;
         font-weight: bold;
-        color: #fff;
+        color: ${(props) => props.theme.fontColor};
         cursor: pointer;
         transition: 0.2s all;
     }

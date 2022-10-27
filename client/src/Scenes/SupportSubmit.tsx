@@ -8,13 +8,23 @@ import { useNavigate } from "react-router-dom";
 
 const StyledSupportSubmit = styled.div `
     .support-submit {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
+        background-color: ${(props) => props.theme.backgroundColor};
+        color: ${(props) => props.theme.fontColor};
     }
     .support-submit__title, .support-submit__text, .support-submit__btn {
         margin-bottom: 15px;
+    }
+    .support-submit__title {
+        color: ${(props) => props.theme.fontColor};
     }
     .support-submit__btn {
         padding: 5px 15px;

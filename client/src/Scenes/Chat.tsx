@@ -66,7 +66,7 @@ const StyledChat = styled.div `
         outline: none;
         background-color: transparent;
         font-size: 15px;
-        color: #fff;
+        color: ${(props) => props.theme.fontColor};
     }
     .form__btn-in {
         padding: 10px 15px;
