@@ -12,6 +12,7 @@ import Users from '../Scenes/Users';
 import Achives from '../Scenes/Achives';
 import Support from '../Scenes/Support'; 
 import SupportSubmit from '../Scenes/SupportSubmit';
+import UserProfileViewing from '../Scenes/UserProfileViewing';
 
 function RootRoute() {
 
@@ -40,6 +41,9 @@ function RootRoute() {
             </Route>
             <Route path={ROUTES.support} element={renderedForGuest(<MainLayout/>)}>
                 <Route path={ROUTES.support} element={<Support/>}></Route>
+            </Route>
+            <Route path={ROUTES.userProfileId} element={renderedForGuest(<MainLayout/>)}>
+                <Route path={ROUTES.userProfileId} element={<UserProfileViewing/>}></Route>
             </Route>
             <Route path={ROUTES.supportSubmit} element={<SupportSubmit/>}></Route>
             <Route path={ROUTES.loginPage} element={<LoginPage/>}></Route>

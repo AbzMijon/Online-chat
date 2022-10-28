@@ -10,6 +10,9 @@ import { filterUsers } from "../helpers/filterUsers";
 import { isServerError } from "../store/selectors/serverErrorSelectors";
 import { useSelector } from "react-redux";
 import GlobalServerError from "../HOC/GlobalServerError";
+import { AiOutlineSearch } from 'react-icons/ai';
+import { useNavigate } from 'react-router-dom';
+import { PATH } from '../constans/routes';
 
 const StyledUsers = styled.div `
     overflow: auto;
@@ -22,11 +25,24 @@ const StyledUsers = styled.div `
         color: ${(props) => props.theme.fontColor};
         margin-bottom: 25px;
     }
+    .header {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-bottom: 95px;
+    }
     .users__sort {
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 105px;
+    }
+    .users__input-search {
+        padding: 10px 20px;
+        outline: none;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
     }
     .users__sort-title {
         margin-right: 15px;
@@ -49,6 +65,11 @@ const StyledUsers = styled.div `
         justify-content: space-between;
         align-items: center;
         flex-direction: column;
+        cursor: pointer;
+        transition: 0.2s ease-in;
+    }
+    .users__user:hover, .users__user-top:hover {
+        transform: scale(0.9);
     }
     .users__name {
         text-align: center;
@@ -76,6 +97,18 @@ const StyledUsers = styled.div `
         border-radius: 0;
         box-shadow: 0 0 50px #ffd400;
     }
+    .users__search {
+        position: relative;
+    }
+    .search-icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 5px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #000;
+    } 
 `
 
 function Users():JSX.Element {
@@ -84,6 +117,8 @@ function Users():JSX.Element {
     const [sortValue, setSortValue] = useState('0');
     const [filteredUsers, setFilteredUsers] = useState([]);
     const isError = useSelector(isServerError);
+    const [searchValue, setSearchValue] = useState('');
+    const navigate = useNavigate();
 
     type User = {
         email: string,
@@ -99,13 +134,13 @@ function Users():JSX.Element {
         })
     }, []);
 
-    const bestLevelUsers = filterUsers([...users], sortValue).splice(0, 3);
-    for (let i = 0; i <= bestLevelUsers.length; i++) {
-        
-    }    
     useEffect(() => {
-        setFilteredUsers(filterUsers([...users], sortValue));
-    }, [sortValue, users]);
+        setFilteredUsers(filterUsers([...users], sortValue, searchValue));
+    }, [sortValue, users, searchValue]);
+
+    const firstLvlUser:any = [...users].sort((prev: { level: number; }, next: { level: number; }) => next.level - prev.level).splice(0, 1);
+    const secondLvlUser:any = [...users].sort((prev: { level: number; }, next: { level: number; }) => next.level - prev.level).splice(1, 1);
+    const thirdLvlUser:any = [...users].sort((prev: { level: number; }, next: { level: number; }) => next.level - prev.level).splice(2, 1);
 
     if(isError) {
         return <GlobalServerError/>
@@ -123,13 +158,32 @@ function Users():JSX.Element {
                         <h4 className="users__sort-title">Сортировать по:</h4>
                         <UserSort setSortValue={setSortValue}/>
                     </div>
+                    <div className="users__search">
+                        <input 
+                            type="text" 
+                            className="users__input-search" 
+                            value={searchValue} 
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            placeholder='По имени..'
+                        />
+                        <AiOutlineSearch className="search-icon"/>
+                    </div>
                 </header>
                 <main className="main">
                     <ul className="users__list">
-                        {filteredUsers.map((user:User, i) => {                            
+                        {filteredUsers.map((user:User) => {                        
                             return (
-                                <li key={user.id} className={i <= 2 && sortValue === '0' ? 'users__user-top' : "users__user"} style={{border: `12px solid ${userlvlColor(+user.level)}`, color: `${userlvlColor(+user.level)}`}}>
-                                    {i <= 2 && sortValue === '0' && 
+                                <li 
+                                    key={user.id} 
+                                    className={(user.id === firstLvlUser[0].id || user.id === secondLvlUser[0].id || user.id === thirdLvlUser[0].id) ? 
+                                    'users__user-top' : 
+                                    "users__user"} 
+                                    style={{border: `12px solid ${userlvlColor(+user.level)}`, color: `${userlvlColor(+user.level)}`}}
+                                    onClick={(e) => {
+                                        navigate(PATH.userProfileId(user.id));
+                                    }}
+                                >
+                                    {(user.id === firstLvlUser[0].id || user.id === secondLvlUser[0].id || user.id === thirdLvlUser[0].id) && 
                                         <GiQueenCrown className="users__crone"/>
                                     }
                                     <h5 className="users__name">{user.name}</h5>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from 'styled-components';
 
 const StyledDailyReward = styled.div `
@@ -8,7 +8,7 @@ const StyledDailyReward = styled.div `
 `
 
 function DailyReward():JSX.Element {
-
+    
     return (
         <StyledDailyReward>
             <div className="daily-reward">

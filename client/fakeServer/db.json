@@ -127,6 +127,36 @@
       "level": 70,
       "messageAmount": 0,
       "about": "крутой панк с челкой до колен!!! 1000 -7 ????"
+    },
+    {
+      "email": "admin@gmail.com",
+      "password": "$2a$10$WsTuvfWJ9mYmYU64RNVT3OcnOO8wNtxnyrGPnR.4i1HK8LeZbZCIe",
+      "name": "Admin",
+      "id": 196,
+      "level": 330,
+      "messageAmount": 0,
+      "about": "Крутой пупс лучшего онлайн чата в мире!",
+      "registryDate": "28.10.2022, 12:01:57"
+    },
+    {
+      "email": "dateTest@gmail.com",
+      "password": "$2a$10$NOcXjdJBKynIc5CwgtUppeCYW.0ldnP49QO9wW.AUnwdm/oI197Q6",
+      "name": "dateTest",
+      "id": 949,
+      "level": 330,
+      "messageAmount": 0,
+      "about": "Крутой пупс лучшего онлайн чата в мире!",
+      "registryDate": "2022-10-28T09:10:05.885Z"
+    },
+    {
+      "email": "utc@gmail.com",
+      "password": "$2a$10$dIn6kSlCMo2NE0/7RL61a.qrRdMVweC1/yRiExs5az1q2L0eGiw6G",
+      "name": "utc",
+      "id": 379,
+      "level": 330,
+      "messageAmount": 0,
+      "about": "Крутой пупс лучшего онлайн чата в мире!",
+      "registryDate": "Fri, 28 Oct 2022 09:16:57 GMT"
     }
   ],
   "supportMessages": [

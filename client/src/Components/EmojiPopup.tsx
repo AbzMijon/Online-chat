@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import EmojiPicker from 'emoji-picker-react';
+import { useSelector } from 'react-redux';
+import { themeMode } from '../store/selectors/themeSelectors';
 
 const StyledEmojiPicker = styled.div `
     .emoji {
@@ -20,11 +22,13 @@ function EmojiPopup({ handleStiker, setMessageValue }):JSX.Element {
         message: string,
     }
 
+    const theme = useSelector(themeMode);
+
     return (
         <StyledEmojiPicker>
             <div className="emoji">
             {handleStiker && <EmojiPicker
-                theme='dark'
+                theme={theme === 'dark' ? 'dark' : 'light'}
                 onEmojiClick={(emojiObj: { emoji: any; }) => setMessageValue((prevMessage: MessageTypes) => prevMessage + emojiObj.emoji)}
                 className='message__emojipicker'
                 />

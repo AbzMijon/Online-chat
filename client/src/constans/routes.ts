@@ -6,6 +6,7 @@ export const ROUTES = {
     achives: '/achives',
     support: '/support',
     supportSubmit: '/supportSubmit',
+    userProfileId: '/userProfileId/:userId',
 }
 
 export const PATH = {
@@ -16,4 +17,5 @@ export const PATH = {
     achives: '/achives',
     support: '/support',
     supportSubmit: '/supportSubmit',
+    userProfileId: (userId: number | string) => `/userProfileId/${userId}`,
 }
