@@ -69,7 +69,7 @@ const StyledUsers = styled.div `
         transition: 0.2s ease-in;
     }
     .users__user:hover, .users__user-top:hover {
-        transform: scale(0.9);
+        transform: scale(0.95);
     }
     .users__name {
         text-align: center;

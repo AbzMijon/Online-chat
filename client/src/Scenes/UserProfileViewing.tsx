@@ -87,8 +87,6 @@ function UserProfileViewing():JSX.Element {
     }
 
     const [user, setUser] = useState(null);
-    console.log(user);
-    
     const {userId} = useParams();
     
     useEffect(() => {
