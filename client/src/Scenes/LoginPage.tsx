@@ -118,6 +118,7 @@ function LoginPage():JSX.Element {
         messageAmount: number | string,
         about: string,
         registryDate: any,
+        likes: number | string,
     }
     const initialFormValues:initialFormvaluesTypes = {
         name: '',
@@ -128,6 +129,7 @@ function LoginPage():JSX.Element {
         messageAmount: 0,
         about: 'Крутой пупс лучшего онлайн чата в мире!',
         registryDate: new Date().toUTCString(),
+        likes: 0,
     }
 
     type formValueTypes = {
@@ -144,6 +146,7 @@ function LoginPage():JSX.Element {
         messageAmount: number | string,
         about: string,
         registryDate: string | number,
+        likes: number | string,
     }
 
     const validateForm = (formValues:validateFormTypes):formValueTypes | void => {
@@ -199,6 +202,7 @@ function LoginPage():JSX.Element {
                             messageAmount: 0,
                             about: formvalues.about,
                             registryDate: formvalues.registryDate,
+                            likes: formvalues.likes,
                         }).then(() => {
                             fetchUsers().then(response => {
                                 const findUser = response.data.find((user: { email: string; }) => user.email === formvalues.email);
