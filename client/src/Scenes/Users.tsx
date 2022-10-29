@@ -13,6 +13,7 @@ import GlobalServerError from "../HOC/GlobalServerError";
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import { PATH } from '../constans/routes';
+import { IUser } from '../types';
 
 const StyledUsers = styled.div `
     overflow: auto;
@@ -113,20 +114,12 @@ const StyledUsers = styled.div `
 
 function Users():JSX.Element {
 
-    const [users, setUsers] = useState([]);
-    const [sortValue, setSortValue] = useState('0');
-    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [users, setUsers] = useState<IUser[]>([]);
+    const [sortValue, setSortValue] = useState<string>('0');
+    const [filteredUsers, setFilteredUsers] = useState<IUser[]>([]);
     const isError = useSelector(isServerError);
-    const [searchValue, setSearchValue] = useState('');
+    const [searchValue, setSearchValue] = useState<string>('');
     const navigate = useNavigate();
-
-    type User = {
-        email: string,
-        id: number | string,
-        level: number | string,
-        name: string,
-        password: string,
-    }
 
     useEffect(() => {
         fetchUsers().then((response) => {
@@ -138,9 +131,9 @@ function Users():JSX.Element {
         setFilteredUsers(filterUsers([...users], sortValue, searchValue));
     }, [sortValue, users, searchValue]);
 
-    const firstLvlUser:any = [...users].sort((prev: { level: number; }, next: { level: number; }) => next.level - prev.level).splice(0, 1);
-    const secondLvlUser:any = [...users].sort((prev: { level: number; }, next: { level: number; }) => next.level - prev.level).splice(1, 1);
-    const thirdLvlUser:any = [...users].sort((prev: { level: number; }, next: { level: number; }) => next.level - prev.level).splice(2, 1);
+    const firstLvlUser:any = [...users].sort((prev:any, next:any) => next.level - prev.level).splice(0, 1);
+    const secondLvlUser:any = [...users].sort((prev:any, next:any) => next.level - prev.level).splice(1, 1);
+    const thirdLvlUser:any = [...users].sort((prev:any, next:any) => next.level - prev.level).splice(2, 1);
 
     if(isError) {
         return <GlobalServerError/>
@@ -171,7 +164,7 @@ function Users():JSX.Element {
                 </header>
                 <main className="main">
                     <ul className="users__list">
-                        {filteredUsers.map((user:User) => {                        
+                        {filteredUsers.map((user) => {
                             return (
                                 <li 
                                     key={user.id} 
