@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from 'react-redux';
 import { loggedUserName } from '../store/selectors/userSelectors'; 
-import { AiOutlineSend } from 'react-icons/ai';
+import { AiOutlinePaperClip, AiOutlineSend } from 'react-icons/ai';
 import Spinner from "../Components/Spinner";
 import { BiSmile } from 'react-icons/bi';
 import GlobalServerError from "../HOC/GlobalServerError";
@@ -12,6 +12,7 @@ import EmojiPopup from "../Components/EmojiPopup";
 import styled from 'styled-components';
 import darkBackground from '../assets/img/darkBackground.jpg';
 import lightBG from '../assets/img/lightBG.jpg'
+import Canvas from "../Components/Canvas";
 
 const StyledChat = styled.div `
     .form__wrapper {
@@ -88,8 +89,11 @@ const StyledChat = styled.div `
     .main {
         margin-top: 60px;
     }
-    .bismile, .aioutlinesend {
+    .bismile, .aioutlinesend, .form__clip {
         color: ${(props) => props.theme.fontColor};
+    }
+    .form__clip {
+        font-size: 25px;
     }
 `
 
@@ -104,6 +108,7 @@ function Chat():JSX.Element {
     const [searchValue, setSearchValue] = useState('');
     const isError = useSelector(isServerError);
     const [messagesCount, setMessagesCount] = useState(0);
+    const [canvasVisible, setCanvasVisible] = useState<boolean>(false);
 
     function connect() {
         socket.current = new WebSocket('ws://localhost:5000');
@@ -193,8 +198,12 @@ function Chat():JSX.Element {
                             className="form__input" 
                             placeholder="Message.." 
                             type="text"/>
+                            <button type="button" className="form__btn" onClick={() => setCanvasVisible(!canvasVisible)}><AiOutlinePaperClip className="form__clip" /></button>
                             <button type="button" className="form__btn" onClick={sendMessage}><AiOutlineSend className="aioutlinesend"/></button>
                         </div>
+                        {canvasVisible &&
+                            <Canvas/>
+                        }
                         <EmojiPopup 
                             handleStiker={handleStiker} 
                             setMessageValue={setMessageValue} 
