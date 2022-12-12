@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styled from 'styled-components';
 import { BsFillMoonStarsFill, BsFillSunFill } from "react-icons/bs";
 import { useSelector } from "react-redux";
@@ -50,6 +50,8 @@ function ThemeSwitcher():JSX.Element {
 
     const theme = useSelector(themeMode);
     const dispatch = useDispatch();
+
+    
     const toggleTheme = () => {
         if(theme === 'dark') {
             return dispatch({type: 'setLightMode'});

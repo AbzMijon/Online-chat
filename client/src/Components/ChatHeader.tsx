@@ -25,7 +25,6 @@ const StyledChatHeader = styled.div `
         flex-direction: column;
         border-bottom: 1px solid #c4c4c4;
         padding: 7px 0;
-        z-index: 3;
     }
     .chat__users {
         color: ${(props) => props.theme.fontColor};
