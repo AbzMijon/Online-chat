@@ -1,5 +1,7 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { BsFillEraserFill } from 'react-icons/bs';
+import { BiPaint } from 'react-icons/bi';
 
 const StyledCanvas = styled.div `
     position: absolute;
@@ -19,6 +21,7 @@ const StyledCanvas = styled.div `
         z-index: 10;
     }
     #canvas {
+        width: 100%;
         border: 1px solid #000;
         background-color: #fff;
         border-radius: 5px 5px 0 0;
@@ -38,30 +41,54 @@ const StyledCanvas = styled.div `
         padding: 5px;
         border-radius: 0 0 5px 5px;
     }
+    .canvas__tool {
+        padding: 3px;
+        font-size: 15px;
+        font-weight: bold;
+        border: 1px solid #000;
+    }
+    .canvas__tool + .canvas__tool {
+        margin-left: 5px;
+    }
 `
 
-function Canvas() {
+function Canvas({ canvasVisible, setCanvasVisible, image, setImage }) {
 
     const [color, setColor] = useState('');
     const canvasRef = useRef(null);
     const contextRef = useRef(null);
     const [isDrawing, setIsDrawing] = useState(false);
     
-    /* let img = canvasRef.current.getImageScaledToCanvas(); */
-    
     useEffect(() => {   
         const canvas = canvasRef.current;
-
-        console.log(canvas.toDataURL("image/jpeg|png|jpg"));
-
         const context = canvas.getContext('2d');
         contextRef.current = context;
     }, []);
-    console.log(color);
-    useMemo(() => {
-        contextRef.strokeStyle = color;
+    
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+        if(color) {
+            context.strokeStyle = color;
+        }
     }, [color]);
     
+    const clearCanvas = () => {
+        const canvas = canvasRef.current;
+        const context = canvas.getContext("2d")
+        context.fillStyle = "white"
+        context.fillRect(0, 0, canvas.width, canvas.height)
+    }
+
+    const sendImage = () => {
+        const canvas = canvasRef.current;
+        const canvasImg = canvas.toDataURL("image/jpeg|png|jpg");
+        setImage(canvasImg);
+        setCanvasVisible(false);
+        clearCanvas();
+    }
+
     const startDrawing = ({ nativeEvent }) => {
         const { offsetX, offsetY } = nativeEvent;
         contextRef.current.beginPath();
@@ -74,6 +101,14 @@ function Canvas() {
         setIsDrawing(false);
     }
 
+    const setDraw = () => {
+        contextRef.current.globalCompositeOperation = 'source-over';
+    }
+
+    const setErase = () => {
+        contextRef.current.globalCompositeOperation = 'destination-out';
+    }
+
     const draw = ({ nativeEvent }) => {
         if (isDrawing) {
             const { offsetX, offsetY } = nativeEvent;
@@ -82,8 +117,9 @@ function Canvas() {
         }
     }
 
+
     return (
-        <StyledCanvas>
+        <StyledCanvas style={{display: `${canvasVisible === true ? 'flex' : 'none'}`}}>
             <div className='canvas'>
                 <canvas
                     id='canvas'
@@ -95,9 +131,13 @@ function Canvas() {
                     ref={canvasRef}>
                 </canvas>
                 <div className="canvas__tools">
-                    <button type='button' className='canvas__delete'>Стереть все</button>
+                    <button type='button' className='canvas__delete' onClick={clearCanvas}>Стереть все</button>
+                    <div className="canvas__draw-and-erase">
+                        <button type='button' className='canvas__tool' onClick={setDraw}><BiPaint /></button>
+                        <button type='button' className='canvas__tool' onClick={setErase}><BsFillEraserFill /></button>
+                    </div>
                     <input type="color" className='canvas__color' value={color} onChange={(e) => setColor(e.target.value)} />
-                    <button type='button' className='canvas__send'>Отправить</button>
+                    <button type='button' className='canvas__send' onClick={sendImage}>Прикрепить к сообщению</button>
                 </div>
             </div>
         </StyledCanvas>

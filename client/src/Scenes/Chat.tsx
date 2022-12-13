@@ -109,6 +109,7 @@ function Chat():JSX.Element {
     const isError = useSelector(isServerError);
     const [messagesCount, setMessagesCount] = useState(0);
     const [canvasVisible, setCanvasVisible] = useState<boolean>(false);
+    const [image, setImage] = useState('');
 
     function connect() {
         socket.current = new WebSocket('ws://localhost:5000');
@@ -157,6 +158,7 @@ function Chat():JSX.Element {
             message: messageValue,
             id: Math.round(Math.random() * 1000),
             event: 'message',
+            graffity: image ? image : '',
         }
         if(message.message.length) {
             socket.current.send(JSON.stringify(message));
@@ -164,6 +166,7 @@ function Chat():JSX.Element {
         }
         setHandleStiker(false);
         setMessagesCount(messagesCount + 1);
+        setImage('');
     }
 
     if(!connected) {
@@ -201,9 +204,11 @@ function Chat():JSX.Element {
                             <button type="button" className="form__btn" onClick={() => setCanvasVisible(!canvasVisible)}><AiOutlinePaperClip className="form__clip" /></button>
                             <button type="button" className="form__btn" onClick={sendMessage}><AiOutlineSend className="aioutlinesend"/></button>
                         </div>
-                        {canvasVisible &&
-                            <Canvas/>
-                        }
+                        <Canvas 
+                            canvasVisible={canvasVisible} 
+                            setCanvasVisible={setCanvasVisible}
+                            image={image}
+                            setImage={setImage}/>
                         <EmojiPopup 
                             handleStiker={handleStiker} 
                             setMessageValue={setMessageValue} 

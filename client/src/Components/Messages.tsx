@@ -78,6 +78,7 @@ function Messages({ messages, searchValue, userName }):JSX.Element {
         userName: string,
         event: string,
         message: string,
+        graffity: string,
     }
     
     return (
@@ -91,6 +92,9 @@ function Messages({ messages, searchValue, userName }):JSX.Element {
                             </div>
                             : <div className={message.userName !== userName ? 'mess-another' : 'mess-me'}>
                                 <span style={{ color: `${nameColor}`}} className="username">{userName}</span> {message.message}
+                                {message.graffity &&
+                                    <img src={message.graffity} alt="" />
+                                }
                                 <img src={defautAvatar} alt="" className={message.userName !== userName ? "message__avatar-mess--another" : "message__avatar-mess--me"}/>
                             </div>
                         }
