@@ -66,7 +66,7 @@ function Canvas({ canvasVisible, setCanvasVisible, image, setImage }) {
     }, []);
     
 
-    useEffect(() => {
+    useEffect(() => { //?
         const canvas = canvasRef.current;
         const context = canvas.getContext('2d');
         if(color) {

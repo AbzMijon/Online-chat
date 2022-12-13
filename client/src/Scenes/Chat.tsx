@@ -95,6 +95,27 @@ const StyledChat = styled.div `
     .form__clip {
         font-size: 25px;
     }
+    .form__fixed-canvas {
+        position: absolute;
+        bottom: 60px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #ffffff5e;
+        text-align: center;
+        color: #363636;
+        width: 100%;
+        font-size: 13px;
+        font-weight: bold;
+    }
+    .fixed__fixed-cross {
+        font-size: 13px;
+        font-weight: bold;
+        position: absolute;
+        top: 50%;
+        left: 15px;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
 `
 
 function Chat():JSX.Element {
@@ -188,6 +209,12 @@ function Chat():JSX.Element {
                             userName={userName}
                         />
                         <div className="form">
+                            {image &&
+                                <div className="form__fixed-canvas">
+                                    <span className="fixed__fixed-cross" onClick={() => setImage('')}>x</span>
+                                    <p className="form__fixed-title">Закрепленное граффити</p>
+                                </div>
+                            }
                             <button className="form__btn form__btn-smile" type="button" onClick={() => setHandleStiker(!handleStiker)}><BiSmile className="bismile"/></button>
                             <input value={messageValue} onKeyDown={(keyPress) => {
                                 if(keyPress.keyCode === 13) {
