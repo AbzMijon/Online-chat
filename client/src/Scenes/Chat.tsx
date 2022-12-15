@@ -131,6 +131,9 @@ function Chat():JSX.Element {
     const [messagesCount, setMessagesCount] = useState(0);
     const [canvasVisible, setCanvasVisible] = useState<boolean>(false);
     const [image, setImage] = useState('');
+    const [drag, setDrag] = useState(false);
+    const [fileDragImg, setFileDragImg] = useState('');
+    
 
     function connect() {
         socket.current = new WebSocket('ws://localhost:5000');
@@ -180,6 +183,7 @@ function Chat():JSX.Element {
             id: Math.round(Math.random() * 1000),
             event: 'message',
             graffity: image ? image : '',
+            image: fileDragImg ? fileDragImg : '',
         }
         if(message.message.length) {
             socket.current.send(JSON.stringify(message));
@@ -188,6 +192,7 @@ function Chat():JSX.Element {
         setHandleStiker(false);
         setMessagesCount(messagesCount + 1);
         setImage('');
+        setFileDragImg('');
     }
 
     if(!connected) {
@@ -195,6 +200,29 @@ function Chat():JSX.Element {
     }
     if (isError) {
         return <GlobalServerError/>
+    }
+
+    const dragStart = (e) => {
+        e.preventDefault();
+        setDrag(true);
+    }
+
+    const dragLeave = (e) => {
+        e.preventDefault();
+        setDrag(false);
+    }
+
+    const dragDrop = (e) => {
+        e.preventDefault();
+        let files = [...e.dataTransfer.files];
+        const file = URL.createObjectURL(files[0]); //the main task is find command - URL.createObjectURL in internet ;) lol
+/*         const reader = new FileReader();
+        reader.onload = () => {
+            dragImgRef;
+            reader.readAsDataURL(file);
+        } */
+        
+        setFileDragImg(file);
     }
 
     return (
@@ -208,11 +236,22 @@ function Chat():JSX.Element {
                             searchValue={searchValue} 
                             userName={userName}
                         />
-                        <div className="form">
-                            {image &&
+                        <div className="form" 
+                            onDragStart={dragStart} 
+                            onDragLeave={dragLeave} 
+                            onDragOver={dragStart}
+                            onDrop={dragDrop}
+                            >
+                            {(image || fileDragImg)  &&
                                 <div className="form__fixed-canvas">
-                                    <span className="fixed__fixed-cross" onClick={() => setImage('')}>x</span>
-                                    <p className="form__fixed-title">Закрепленное граффити</p>
+                                    <span className="fixed__fixed-cross" onClick={() => {
+                                        if(image) {
+                                            setImage('')
+                                        } else {
+                                            setFileDragImg('');
+                                        }
+                                    }}>x</span>
+                                    <p className="form__fixed-title">{image && 'Закрепленное граффити'}{fileDragImg && 'Закрепленная картинка'}</p>
                                 </div>
                             }
                             <button className="form__btn form__btn-smile" type="button" onClick={() => setHandleStiker(!handleStiker)}><BiSmile className="bismile"/></button>

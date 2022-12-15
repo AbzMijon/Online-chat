@@ -68,6 +68,11 @@ const StyledMessages = styled.div `
         color: #b71d1d;
         font-weight: bold;
     }
+    .dragon-img {
+        width: 300px;
+        height: 300px;
+        object-fit: cover;
+    }
 `
 
 function Messages({ messages, searchValue, userName }):JSX.Element {
@@ -79,6 +84,7 @@ function Messages({ messages, searchValue, userName }):JSX.Element {
         event: string,
         message: string,
         graffity: string,
+        image: string,
     }
     
     return (
@@ -94,6 +100,9 @@ function Messages({ messages, searchValue, userName }):JSX.Element {
                                 <span style={{ color: `${nameColor}`}} className="username">{userName}</span> {message.message}
                                 {message.graffity &&
                                     <img src={message.graffity} alt="" />
+                                }
+                                {message.image &&
+                                    <img className='dragon-img' src={message.image} alt="" />
                                 }
                                 <img src={defautAvatar} alt="" className={message.userName !== userName ? "message__avatar-mess--another" : "message__avatar-mess--me"}/>
                             </div>
